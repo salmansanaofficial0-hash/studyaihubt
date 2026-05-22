@@ -1,0 +1,86 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
+import { POSTS } from "@/data/posts";
+
+export const Route = createFileRoute("/about")({
+  component: AboutPage,
+  head: () => ({
+    meta: [
+      { title: "About — StudyAI Hub" },
+      { name: "description", content: "Why StudyAI Hub exists, who's behind it, and where to start reading." },
+      { property: "og:title", content: "About — StudyAI Hub" },
+      { property: "og:description", content: "A blog built by students, for students, about studying smarter with AI." },
+      { property: "og:url", content: "/about" },
+    ],
+    links: [{ rel: "canonical", href: "/about" }],
+  }),
+});
+
+function AboutPage() {
+  const startHere = POSTS.filter((p) => p.featured).slice(0, 4);
+  return (
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <p className="text-sm text-primary font-medium">About</p>
+      <h1 className="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight">
+        Built by a student, <span className="text-gradient-brand">for students.</span>
+      </h1>
+
+      <div className="prose-article mt-10">
+        <p>
+          Hi — I'm Ahmed, a BBA student at the University of Karachi. I started StudyAI Hub because every other "student
+          productivity" blog I read either had no idea what student life is actually like, or was 90% sponsored content for
+          tools nobody uses.
+        </p>
+        <h2>Our mission</h2>
+        <p>
+          Help university students study smarter without burning out. We test AI tools in real assignments, write study
+          guides we wish we had in first year, and break down business and finance concepts in plain English.
+        </p>
+        <h2>What we cover</h2>
+        <ul>
+          <li>AI tools — what's actually useful, what's hype</li>
+          <li>Study techniques — Pomodoro, active recall, spaced repetition</li>
+          <li>Productivity — time management, focus, beating procrastination</li>
+          <li>Business & finance — for BBA and business students</li>
+          <li>Presentations — design, delivery, AI-assisted decks</li>
+          <li>Tech reviews — laptops, apps, gear</li>
+        </ul>
+        <h2>The promise</h2>
+        <p>
+          No fluff. No sponsored content disguised as honest reviews. If a tool isn't worth it, we say so. If a study
+          method only works for specific subjects, we'll tell you that too.
+        </p>
+      </div>
+
+      <h2 className="mt-14 text-2xl font-extrabold">Start here</h2>
+      <p className="text-muted-foreground mt-2">If you're new, these four articles will give you the biggest wins fastest.</p>
+      <div className="mt-6 space-y-3">
+        {startHere.map((p, i) => (
+          <Link
+            key={p.id}
+            to="/blog/$slug"
+            params={{ slug: p.slug }}
+            className="flex items-center justify-between gap-4 p-4 rounded-xl border border-border hover:border-primary hover:bg-card transition-colors group"
+          >
+            <div className="flex items-center gap-4">
+              <span className="text-2xl font-extrabold text-muted-foreground w-6">{i + 1}</span>
+              <div>
+                <p className="font-semibold group-hover:text-primary transition-colors">{p.title}</p>
+                <p className="text-xs text-muted-foreground">{p.category} · {p.readingTime}</p>
+              </div>
+            </div>
+            <ArrowRight className="h-4 w-4 text-muted-foreground" />
+          </Link>
+        ))}
+      </div>
+
+      <div className="mt-14 p-8 rounded-2xl bg-gradient-brand text-white text-center">
+        <h3 className="text-xl font-extrabold">Got questions or feedback?</h3>
+        <p className="mt-2 text-white/85 text-sm">I read every email. Promise.</p>
+        <Link to="/contact" className="mt-5 inline-flex px-5 py-2.5 rounded-lg bg-white text-primary font-semibold">
+          Get in touch
+        </Link>
+      </div>
+    </div>
+  );
+}
