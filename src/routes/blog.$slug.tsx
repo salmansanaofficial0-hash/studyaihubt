@@ -7,8 +7,10 @@ import { ReadingProgress } from "@/components/ReadingProgress";
 import { PostCard } from "@/components/PostCard";
 import { Toast, useToast } from "@/components/Toast";
 
+import type { Post } from "@/data/posts";
+
 export const Route = createFileRoute("/blog/$slug")({
-  loader: ({ params }) => {
+  loader: ({ params }): { post: Post } => {
     const post = postBySlug(params.slug);
     if (!post) throw notFound();
     return { post };
