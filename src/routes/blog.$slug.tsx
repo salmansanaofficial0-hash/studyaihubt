@@ -63,7 +63,7 @@ export const Route = createFileRoute("/blog/$slug")({
 });
 
 function BlogPost() {
-  const { post } = Route.useLoaderData();
+  const { post } = Route.useLoaderData() as { post: Post };
   const headings = useMemo(() => extractHeadings(post.content), [post.content]);
   const { msg, show } = useToast();
   const [helpful, setHelpful] = useState<{ yes: number; no: number; voted: "yes" | "no" | null }>({ yes: 42, no: 3, voted: null });

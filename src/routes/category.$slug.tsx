@@ -39,7 +39,7 @@ export const Route = createFileRoute("/category/$slug")({
 });
 
 function CategoryPage() {
-  const { category, posts } = Route.useLoaderData();
+  const { category, posts } = Route.useLoaderData() as { category: Category; posts: Post[] };
   return (
     <div>
       <section
