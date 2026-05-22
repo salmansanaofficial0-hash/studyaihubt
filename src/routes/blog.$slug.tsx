@@ -6,6 +6,7 @@ import { ArticleBody, TableOfContents, extractHeadings } from "@/components/Arti
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { PostCard } from "@/components/PostCard";
 import { Toast, useToast } from "@/components/Toast";
+import { subscribeToNewsletter } from "@/lib/newsletter";
 
 import type { Post } from "@/data/posts";
 
@@ -182,8 +183,17 @@ function BlogPost() {
               <div className="rounded-2xl border border-border p-5 bg-gradient-brand text-white">
                 <p className="font-semibold">Free weekly digest</p>
                 <p className="mt-1 text-xs text-white/85">AI tools and study tips, every Friday.</p>
-                <form onSubmit={(e) => { e.preventDefault(); show("Subscribed!"); }} className="mt-3 flex flex-col gap-2">
-                  <input type="email" required placeholder="your@email.com" className="px-3 py-2 rounded-md bg-white/15 placeholder:text-white/70 text-white text-sm outline-none" />
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const input = e.currentTarget.elements.namedItem("email") as HTMLInputElement;
+                    const res = await subscribeToNewsletter(input.value, `post:${post.slug}`);
+                    if (res.ok) { show("Subscribed!"); input.value = ""; }
+                    else show(res.error || "Try again");
+                  }}
+                  className="mt-3 flex flex-col gap-2"
+                >
+                  <input name="email" type="email" required placeholder="your@email.com" className="px-3 py-2 rounded-md bg-white/15 placeholder:text-white/70 text-white text-sm outline-none" />
                   <button className="px-3 py-2 rounded-md bg-white text-primary text-sm font-semibold">Subscribe</button>
                 </form>
               </div>
