@@ -25,12 +25,14 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "og:title", content: p.title },
         { property: "og:description", content: p.excerpt },
         { property: "og:type", content: "article" },
-        { property: "og:url", content: `/blog/${p.slug}` },
+        { property: "og:url", content: `https://studyaihubt.lovable.app/blog/${p.slug}` },
         { property: "article:author", content: p.author },
         { property: "article:published_time", content: p.date },
         { property: "article:section", content: p.category },
+        { name: "twitter:title", content: p.title },
+        { name: "twitter:description", content: p.excerpt },
       ],
-      links: [{ rel: "canonical", href: `/blog/${p.slug}` }],
+      links: [{ rel: "canonical", href: `https://studyaihubt.lovable.app/blog/${p.slug}` }],
       scripts: [
         {
           type: "application/ld+json",
