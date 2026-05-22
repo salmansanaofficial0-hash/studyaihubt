@@ -10,9 +10,9 @@ export const Route = createFileRoute("/about")({
       { name: "description", content: "Why StudyAI Hub exists, who's behind it, and where to start reading." },
       { property: "og:title", content: "About — StudyAI Hub" },
       { property: "og:description", content: "A blog built by students, for students, about studying smarter with AI." },
-      { property: "og:url", content: "/about" },
+      { property: "og:url", content: "https://studyaihubt.lovable.app/about" },
     ],
-    links: [{ rel: "canonical", href: "/about" }],
+    links: [{ rel: "canonical", href: "https://studyaihubt.lovable.app/about" }],
   }),
 });
 

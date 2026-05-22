@@ -13,9 +13,9 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Discover the best AI tools, study strategies, and productivity hacks built for university students." },
       { property: "og:title", content: "StudyAI Hub — Study Smarter With AI" },
       { property: "og:description", content: "AI tools and study tips built for university students." },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: "https://studyaihubt.lovable.app/" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: "https://studyaihubt.lovable.app/" }],
   }),
 });
 
