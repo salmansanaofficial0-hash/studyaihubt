@@ -214,6 +214,8 @@ function ToolsSpotlight() {
 function NewsletterCTA() {
   const [email, setEmail] = useState("");
   const [ok, setOk] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   return (
     <section className="mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -226,7 +228,15 @@ function NewsletterCTA() {
               <p className="mt-6 text-lg font-medium">🎉 You're in! Check your inbox.</p>
             ) : (
               <form
-                onSubmit={(e) => { e.preventDefault(); if (email.includes("@")) { setOk(true); setEmail(""); } }}
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setErr(null);
+                  setLoading(true);
+                  const res = await subscribeToNewsletter(email, "home_cta");
+                  setLoading(false);
+                  if (res.ok) { setOk(true); setEmail(""); }
+                  else setErr(res.error || "Something went wrong.");
+                }}
                 className="mt-6 flex flex-col sm:flex-row gap-2 max-w-lg"
               >
                 <input
@@ -237,11 +247,12 @@ function NewsletterCTA() {
                   placeholder="your@email.com"
                   className="flex-1 px-4 py-3 rounded-lg bg-white/15 backdrop-blur text-white placeholder:text-white/70 outline-none focus:ring-2 ring-white"
                 />
-                <button className="px-6 py-3 rounded-lg bg-white text-primary font-semibold hover:scale-[1.02] transition-transform">
-                  Subscribe Free
+                <button disabled={loading} className="px-6 py-3 rounded-lg bg-white text-primary font-semibold hover:scale-[1.02] transition-transform disabled:opacity-70">
+                  {loading ? "Subscribing..." : "Subscribe Free"}
                 </button>
               </form>
             )}
+            {err && <p className="mt-3 text-sm text-white">{err}</p>}
             <p className="mt-3 text-xs text-white/70">No spam. Unsubscribe anytime.</p>
           </div>
         </div>
