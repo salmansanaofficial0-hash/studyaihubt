@@ -5,7 +5,7 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const BASE_URL = "";
+        const BASE_URL = "https://studyaihubt.lovable.app";
         const staticPaths = ["/", "/blog", "/ai-tools", "/about", "/contact"];
         const blog = POSTS.map((p) => `/blog/${p.slug}`);
         const cats = Array.from(new Set(POSTS.map((p) => p.categorySlug))).map((s) => `/category/${s}`);
