@@ -98,7 +98,8 @@ export function ArticleBody({ content }: { content: string }) {
             </ol>
           );
         if (b.type === "quote") return <blockquote key={i}>{b.text}</blockquote>;
-        return <p key={i} dangerouslySetInnerHTML={{ __html: inline(b.text) }} />;
+        if (b.type === "p") return <p key={i} dangerouslySetInnerHTML={{ __html: inline(b.text) }} />;
+        return null;
       })}
     </div>
   );
