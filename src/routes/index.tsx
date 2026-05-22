@@ -4,6 +4,7 @@ import { ArrowRight, Sparkles, Star, Users, BookOpen, Clock, Eye } from "lucide-
 import { CATEGORIES, POSTS } from "@/data/posts";
 import { TOOLS } from "@/data/tools";
 import { PostCard, formatViews } from "@/components/PostCard";
+import { subscribeToNewsletter } from "@/lib/newsletter";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
