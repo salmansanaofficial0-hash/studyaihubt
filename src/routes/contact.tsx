@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { Twitter, Instagram, Youtube, Linkedin } from "lucide-react";
+import { submitContact } from "@/lib/contact.functions";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
@@ -17,18 +19,31 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
+  const send = useServerFn(submitContact);
   const [form, setForm] = useState({ name: "", email: "", subject: "General", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [serverErr, setServerErr] = useState<string | null>(null);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setServerErr(null);
     const next: Record<string, string> = {};
     if (!form.name.trim()) next.name = "Required";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = "Valid email required";
     if (form.message.trim().length < 10) next.message = "Min 10 characters";
     setErrors(next);
-    if (Object.keys(next).length === 0) setSent(true);
+    if (Object.keys(next).length > 0) return;
+    setLoading(true);
+    try {
+      await send({ data: form });
+      setSent(true);
+    } catch (err) {
+      setServerErr(err instanceof Error ? err.message : "Failed to send. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (sent) {
