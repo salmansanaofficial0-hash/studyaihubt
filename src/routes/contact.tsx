@@ -99,9 +99,10 @@ function ContactPage() {
             className="w-full px-4 py-2.5 rounded-lg bg-muted outline-none focus:ring-2 ring-primary resize-none"
           />
         </Field>
-        <button className="w-full sm:w-auto px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition">
-          Send Message
+        <button disabled={loading} className="w-full sm:w-auto px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition disabled:opacity-60">
+          {loading ? "Sending..." : "Send Message"}
         </button>
+        {serverErr && <p className="text-sm text-destructive">{serverErr}</p>}
       </form>
 
       <div className="mt-12 pt-8 border-t border-border">
