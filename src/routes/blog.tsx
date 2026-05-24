@@ -1,10 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import { CATEGORIES, POSTS } from "@/data/posts";
 import { PostCard } from "@/components/PostCard";
+import { getAllPosts, getCategories } from "@/lib/posts.functions";
+import type { Post, Category } from "@/lib/posts-types";
 
 export const Route = createFileRoute("/blog")({
+  loader: async (): Promise<{ posts: Post[]; categories: Category[] }> => {
+    const [posts, categories] = await Promise.all([getAllPosts(), getCategories()]);
+    return { posts, categories };
+  },
   component: BlogPage,
   head: () => ({
     meta: [
@@ -16,19 +21,26 @@ export const Route = createFileRoute("/blog")({
     ],
     links: [{ rel: "canonical", href: "https://studyaihubt.lovable.app/blog" }],
   }),
+  errorComponent: ({ error }) => (
+    <div className="max-w-xl mx-auto px-4 py-24 text-center">
+      <h1 className="text-2xl font-bold">Couldn't load articles</h1>
+      <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
+    </div>
+  ),
 });
 
 const SORT = ["Latest", "Most Popular", "Reading Time"] as const;
 type Sort = (typeof SORT)[number];
 
 function BlogPage() {
+  const { posts, categories } = Route.useLoaderData();
   const [tab, setTab] = useState<string>("All");
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<Sort>("Latest");
   const [visible, setVisible] = useState(6);
 
   const filtered = useMemo(() => {
-    let list = [...POSTS];
+    let list = [...posts];
     if (tab !== "All") list = list.filter((p) => p.category === tab);
     if (q) {
       const s = q.toLowerCase();
@@ -41,11 +53,11 @@ function BlogPage() {
     }
     if (sort === "Latest") list.sort((a, b) => b.date.localeCompare(a.date));
     if (sort === "Most Popular") list.sort((a, b) => b.views - a.views);
-    if (sort === "Reading Time") list.sort((a, b) => parseInt(a.readingTime) - parseInt(b.readingTime));
+    if (sort === "Reading Time") list.sort((a, b) => a.readingMinutes - b.readingMinutes);
     return list;
-  }, [tab, q, sort]);
+  }, [posts, tab, q, sort]);
 
-  const tabs = ["All", ...CATEGORIES.map((c) => c.name)];
+  const tabs = ["All", ...categories.map((c) => c.name)];
   const shown = filtered.slice(0, visible);
 
   return (
@@ -59,19 +71,9 @@ function BlogPage() {
       <div className="flex flex-col lg:flex-row lg:items-center gap-4 mb-6">
         <div className="flex-1 relative">
           <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <input
-            type="search"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search articles..."
-            className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-muted outline-none focus:ring-2 ring-primary text-sm"
-          />
+          <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search articles..." className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-muted outline-none focus:ring-2 ring-primary text-sm" />
         </div>
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value as Sort)}
-          className="px-3 py-2.5 rounded-lg bg-muted text-sm outline-none focus:ring-2 ring-primary"
-        >
+        <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="px-3 py-2.5 rounded-lg bg-muted text-sm outline-none focus:ring-2 ring-primary">
           {SORT.map((s) => <option key={s}>{s}</option>)}
         </select>
       </div>
@@ -82,9 +84,7 @@ function BlogPage() {
             key={t}
             onClick={() => { setTab(t); setVisible(6); }}
             className={`px-3.5 py-1.5 rounded-full text-sm whitespace-nowrap border transition-colors ${
-              tab === t
-                ? "bg-primary text-primary-foreground border-primary"
-                : "bg-card border-border hover:border-primary/40"
+              tab === t ? "bg-primary text-primary-foreground border-primary" : "bg-card border-border hover:border-primary/40"
             }`}
           >
             {t}
@@ -96,16 +96,11 @@ function BlogPage() {
         {shown.map((p) => <PostCard key={p.id} post={p} />)}
       </div>
 
-      {filtered.length === 0 && (
-        <p className="text-center text-muted-foreground py-16">No articles match your search.</p>
-      )}
+      {filtered.length === 0 && <p className="text-center text-muted-foreground py-16">No articles match your search.</p>}
 
       {visible < filtered.length && (
         <div className="mt-10 text-center">
-          <button
-            onClick={() => setVisible((v) => v + 6)}
-            className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-medium hover:opacity-90 transition"
-          >
+          <button onClick={() => setVisible((v) => v + 6)} className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-medium hover:opacity-90 transition">
             Load More
           </button>
         </div>
