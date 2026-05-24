@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import type { Post } from "@/data/posts";
+import type { Post } from "@/lib/posts-types";
 import { Clock, Eye } from "lucide-react";
 
 export function PostCard({ post, size = "md" }: { post: Post; size?: "sm" | "md" | "lg" }) {
