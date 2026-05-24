@@ -6,6 +6,7 @@ import { ArticleBody, TableOfContents, extractHeadings } from "@/components/Arti
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { PostCard } from "@/components/PostCard";
 import { Toast, useToast } from "@/components/Toast";
+import { AIAssistant } from "@/components/AIAssistant";
 import { subscribeToNewsletter } from "@/lib/newsletter";
 import {
   getPostBySlug,
