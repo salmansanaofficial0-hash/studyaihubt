@@ -205,6 +205,10 @@ function BlogPost() {
                 ))}
               </div>
 
+              <AIAssistant title={post.title} content={post.content} />
+
+
+
               <div className="mt-10 p-6 rounded-2xl bg-card border border-border">
                 <p className="font-semibold">Was this helpful?</p>
                 <div className="mt-3 flex gap-3">
