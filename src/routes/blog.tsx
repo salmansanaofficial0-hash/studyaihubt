@@ -33,7 +33,7 @@ const SORT = ["Latest", "Most Popular", "Reading Time"] as const;
 type Sort = (typeof SORT)[number];
 
 function BlogPage() {
-  const { posts, categories } = Route.useLoaderData();
+  const { posts, categories } = Route.useLoaderData() as { posts: Post[]; categories: Category[] };
   const [tab, setTab] = useState<string>("All");
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<Sort>("Latest");
