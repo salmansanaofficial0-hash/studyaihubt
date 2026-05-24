@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { POSTS } from "@/data/posts";
+import { getAllPosts } from "@/lib/posts.functions";
+import type { Post } from "@/lib/posts-types";
 
 export const Route = createFileRoute("/about")({
+  loader: async (): Promise<{ posts: Post[] }> => ({ posts: await getAllPosts() }),
   component: AboutPage,
   head: () => ({
     meta: [
@@ -17,7 +19,8 @@ export const Route = createFileRoute("/about")({
 });
 
 function AboutPage() {
-  const startHere = POSTS.filter((p) => p.featured).slice(0, 4);
+  const { posts } = Route.useLoaderData() as { posts: Post[] };
+  const startHere = posts.filter((p) => p.featured).slice(0, 4);
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <p className="text-sm text-primary font-medium">About</p>
