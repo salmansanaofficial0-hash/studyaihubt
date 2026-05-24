@@ -1,13 +1,13 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { categoryBySlug, postsByCategory } from "@/data/posts";
-import type { Category, Post } from "@/data/posts";
 import { PostCard } from "@/components/PostCard";
+import { getPostsByCategorySlug } from "@/lib/posts.functions";
+import type { Category, Post } from "@/lib/posts-types";
 
 export const Route = createFileRoute("/category/$slug")({
-  loader: ({ params }): { category: Category; posts: Post[] } => {
-    const category = categoryBySlug(params.slug);
-    if (!category) throw notFound();
-    return { category, posts: postsByCategory(params.slug) };
+  loader: async ({ params }): Promise<{ category: Category; posts: Post[] }> => {
+    const res = await getPostsByCategorySlug({ data: { slug: params.slug } });
+    if (!res.category) throw notFound();
+    return { category: res.category, posts: res.posts };
   },
   head: ({ loaderData }) => {
     const c = loaderData?.category;
