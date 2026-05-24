@@ -28,23 +28,50 @@ function AboutPage() {
         Built by a student, <span className="text-gradient-brand">for students.</span>
       </h1>
 
+      {/* Profile Section */}
+      <div className="mt-10 flex flex-col md:flex-row items-center gap-8 mb-12">
+        {/* Profile Picture */}
+        <div className="flex-shrink-0">
+          <div className="relative">
+            <div className="w-40 h-40 rounded-full bg-cyan-400 p-1 overflow-hidden shadow-lg">
+              <img
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop"
+                alt="Salman Sana"
+                className="w-full h-full rounded-full object-cover"
+              />
+            </div>
+            <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-400/20 to-transparent"></div>
+          </div>
+        </div>
+
+        {/* Profile Info */}
+        <div className="flex-1">
+          <h2 className="text-3xl font-extrabold">Salman Sana</h2>
+          <p className="text-lg text-primary font-semibold mt-1">University of Turbat</p>
+          <p className="text-muted-foreground mt-3 max-w-lg">
+            Student at University of Turbat passionate about making education more accessible through AI and modern technology. 
+            I created StudyAI Hub to help students like me study smarter, not harder.
+          </p>
+        </div>
+      </div>
+
       <div className="prose-article mt-10">
         <p>
-          Hi — I'm Ahmed, a BBA student at the University of Karachi. I started StudyAI Hub because every other "student
+          Hi — I'm Salman Sana, a student at the University of Turbat. I started StudyAI Hub because every other "student
           productivity" blog I read either had no idea what student life is actually like, or was 90% sponsored content for
           tools nobody uses.
         </p>
         <h2>Our mission</h2>
         <p>
           Help university students study smarter without burning out. We test AI tools in real assignments, write study
-          guides we wish we had in first year, and break down business and finance concepts in plain English.
+          guides we wish we had in first year, and break down complex concepts in plain English.
         </p>
         <h2>What we cover</h2>
         <ul>
           <li>AI tools — what's actually useful, what's hype</li>
           <li>Study techniques — Pomodoro, active recall, spaced repetition</li>
           <li>Productivity — time management, focus, beating procrastination</li>
-          <li>Business & finance — for BBA and business students</li>
+          <li>Learning strategies — for all fields of study</li>
           <li>Presentations — design, delivery, AI-assisted decks</li>
           <li>Tech reviews — laptops, apps, gear</li>
         </ul>
