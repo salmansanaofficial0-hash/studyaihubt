@@ -1,12 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowRight, Sparkles, Star, Users, BookOpen, Clock, Eye } from "lucide-react";
-import { CATEGORIES, POSTS } from "@/data/posts";
 import { TOOLS } from "@/data/tools";
 import { PostCard, formatViews } from "@/components/PostCard";
 import { subscribeToNewsletter } from "@/lib/newsletter";
+import { getAllPosts, getCategories } from "@/lib/posts.functions";
+import type { Post, Category } from "@/lib/posts-types";
 
 export const Route = createFileRoute("/")({
+  loader: async (): Promise<{ posts: Post[]; categories: Category[] }> => {
+    const [posts, categories] = await Promise.all([getAllPosts(), getCategories()]);
+    return { posts, categories };
+  },
   component: HomePage,
   head: () => ({
     meta: [
@@ -18,16 +23,23 @@ export const Route = createFileRoute("/")({
     ],
     links: [{ rel: "canonical", href: "https://studyaihubt.lovable.app/" }],
   }),
+  errorComponent: ({ error }) => (
+    <div className="max-w-xl mx-auto px-4 py-24 text-center">
+      <h1 className="text-2xl font-bold">Couldn't load the homepage</h1>
+      <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
+    </div>
+  ),
 });
 
 function HomePage() {
+  const { posts, categories } = Route.useLoaderData();
   return (
     <>
-      <Hero />
+      <Hero categories={categories} />
       <Stats />
-      <FeaturedCategories />
-      <FeaturedPosts />
-      <PopularPosts />
+      <FeaturedCategories categories={categories} posts={posts} />
+      <FeaturedPosts posts={posts} />
+      <PopularPosts posts={posts} />
       <ToolsSpotlight />
       <NewsletterCTA />
       <Testimonials />
@@ -35,7 +47,7 @@ function HomePage() {
   );
 }
 
-function Hero() {
+function Hero({ categories }: { categories: Category[] }) {
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-gradient-brand animate-gradient-shift opacity-90" />
@@ -51,26 +63,16 @@ function Hero() {
           Discover the best AI tools, study strategies, and productivity hacks built for university students.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link
-            to="/ai-tools"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-white text-primary font-semibold hover:scale-[1.02] transition-transform"
-          >
+          <Link to="/ai-tools" className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-white text-primary font-semibold hover:scale-[1.02] transition-transform">
             Explore AI Tools <ArrowRight className="h-4 w-4" />
           </Link>
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/40 hover:bg-white/10 font-semibold transition-colors"
-          >
+          <Link to="/blog" className="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/40 hover:bg-white/10 font-semibold transition-colors">
             Read Latest Posts
           </Link>
         </div>
         <div className="mt-10 flex flex-wrap gap-2">
-          {CATEGORIES.slice(0, 4).map((c) => (
-            <a
-              key={c.slug}
-              href="#categories"
-              className="px-3 py-1.5 rounded-full text-sm bg-white/15 hover:bg-white/25 backdrop-blur transition-colors"
-            >
+          {categories.slice(0, 4).map((c) => (
+            <a key={c.slug} href="#categories" className="px-3 py-1.5 rounded-full text-sm bg-white/15 hover:bg-white/25 backdrop-blur transition-colors">
               {c.emoji} {c.name}
             </a>
           ))}
@@ -105,30 +107,20 @@ function Stats() {
   );
 }
 
-function FeaturedCategories() {
+function FeaturedCategories({ categories, posts }: { categories: Category[]; posts: Post[] }) {
   return (
     <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
       <SectionHeader title="What Do You Need Help With?" subtitle="Browse by topic" />
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-        {CATEGORIES.map((c) => {
-          const count = POSTS.filter((p) => p.categorySlug === c.slug).length;
+        {categories.map((c) => {
+          const count = posts.filter((p) => p.categorySlug === c.slug).length;
           return (
-            <Link
-              key={c.slug}
-              to="/category/$slug"
-              params={{ slug: c.slug }}
-              className="group rounded-2xl bg-card border border-border p-6 hover-lift"
-            >
+            <Link key={c.slug} to="/category/$slug" params={{ slug: c.slug }} className="group rounded-2xl bg-card border border-border p-6 hover-lift">
               <div className="flex items-start justify-between">
-                <span
-                  className="h-12 w-12 rounded-xl inline-flex items-center justify-center text-2xl"
-                  style={{ backgroundColor: `${c.color}22` }}
-                >
+                <span className="h-12 w-12 rounded-xl inline-flex items-center justify-center text-2xl" style={{ backgroundColor: `${c.color}22` }}>
                   {c.emoji}
                 </span>
-                <span className="text-[11px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
-                  {count} posts
-                </span>
+                <span className="text-[11px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground">{count} posts</span>
               </div>
               <h3 className="mt-4 font-bold group-hover:text-primary transition-colors">{c.name}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{c.description}</p>
@@ -140,8 +132,9 @@ function FeaturedCategories() {
   );
 }
 
-function FeaturedPosts() {
-  const featured = POSTS.filter((p) => p.featured).slice(0, 3);
+function FeaturedPosts({ posts }: { posts: Post[] }) {
+  const featured = posts.filter((p) => p.featured).slice(0, 3);
+  if (featured.length === 0) return null;
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
       <SectionHeader title="Fresh From the Blog" subtitle="Our latest deep dives" linkTo="/blog" linkLabel="All posts" />
@@ -152,23 +145,16 @@ function FeaturedPosts() {
   );
 }
 
-function PopularPosts() {
-  const popular = POSTS.filter((p) => p.popular).slice(0, 4);
+function PopularPosts({ posts }: { posts: Post[] }) {
+  const popular = posts.filter((p) => p.popular).slice(0, 4);
+  if (popular.length === 0) return null;
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
       <SectionHeader title="Students Are Reading This" subtitle="Most popular this month" />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {popular.map((p) => (
-          <Link
-            key={p.id}
-            to="/blog/$slug"
-            params={{ slug: p.slug }}
-            className="flex gap-4 rounded-2xl bg-card border border-border p-4 hover-lift"
-          >
-            <div
-              className="shrink-0 h-24 w-24 rounded-xl flex items-center justify-center text-4xl"
-              style={{ backgroundImage: `linear-gradient(135deg, ${p.categoryColor}33, ${p.categoryColor}11)` }}
-            >
+          <Link key={p.id} to="/blog/$slug" params={{ slug: p.slug }} className="flex gap-4 rounded-2xl bg-card border border-border p-4 hover-lift">
+            <div className="shrink-0 h-24 w-24 rounded-xl flex items-center justify-center text-4xl" style={{ backgroundImage: `linear-gradient(135deg, ${p.categoryColor}33, ${p.categoryColor}11)` }}>
               {p.emoji}
             </div>
             <div className="min-w-0">
@@ -240,14 +226,7 @@ function NewsletterCTA() {
                 }}
                 className="mt-6 flex flex-col sm:flex-row gap-2 max-w-lg"
               >
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  className="flex-1 px-4 py-3 rounded-lg bg-white/15 backdrop-blur text-white placeholder:text-white/70 outline-none focus:ring-2 ring-white"
-                />
+                <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your@email.com" className="flex-1 px-4 py-3 rounded-lg bg-white/15 backdrop-blur text-white placeholder:text-white/70 outline-none focus:ring-2 ring-white" />
                 <button disabled={loading} className="px-6 py-3 rounded-lg bg-white text-primary font-semibold hover:scale-[1.02] transition-transform disabled:opacity-70">
                   {loading ? "Subscribing..." : "Subscribe Free"}
                 </button>
