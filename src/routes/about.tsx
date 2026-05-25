@@ -36,7 +36,7 @@ function AboutPage() {
           <div className="relative">
             <div className="w-40 h-40 rounded-full bg-cyan-400 p-1 overflow-hidden shadow-lg">
               <img
-                src="/salman-profile.jpg"
+                src={founderImg}
                 alt="Salman Sana"
                 className="w-full h-full rounded-full object-cover"
               />
