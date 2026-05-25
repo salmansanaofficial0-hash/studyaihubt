@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { getAllPosts } from "@/lib/posts.functions";
 import type { Post } from "@/lib/posts-types";
+import founderImg from "@/assets/founder.png";
 
 export const Route = createFileRoute("/about")({
   loader: async (): Promise<{ posts: Post[] }> => ({ posts: await getAllPosts() }),
