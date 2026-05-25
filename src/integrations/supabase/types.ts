@@ -244,7 +244,38 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      approved_comments: {
+        Row: {
+          created_at: string | null
+          id: string | null
+          message: string | null
+          name: string | null
+          post_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string | null
+          message?: string | null
+          name?: string | null
+          post_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string | null
+          message?: string | null
+          name?: string | null
+          post_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never
