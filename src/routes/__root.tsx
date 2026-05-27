@@ -70,6 +70,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "manifest", href: "/manifest.json" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" },
@@ -79,16 +80,38 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "WebSite",
-          name: "StudyAI Hub",
-          url: "https://studyaihubt.lovable.app",
-          description: "AI tools and study tips for university students.",
-          inLanguage: "en",
-          potentialAction: {
-            "@type": "SearchAction",
-            target: "https://studyaihubt.lovable.app/blog?q={search_term_string}",
-            "query-input": "required name=search_term_string",
-          },
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://studyaihubt.lovable.app/#organization",
+              name: "StudyAI Hub",
+              url: "https://studyaihubt.lovable.app",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://studyaihubt.lovable.app/favicon.ico",
+              },
+              description: "AI tools and study tips for university students.",
+              sameAs: [
+                "https://twitter.com/StudyAIHub",
+                "https://www.linkedin.com/company/studyaihub",
+                "https://www.youtube.com/@StudyAIHub",
+              ],
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://studyaihubt.lovable.app/#website",
+              name: "StudyAI Hub",
+              url: "https://studyaihubt.lovable.app",
+              description: "AI tools and study tips for university students.",
+              inLanguage: "en",
+              publisher: { "@id": "https://studyaihubt.lovable.app/#organization" },
+              potentialAction: {
+                "@type": "SearchAction",
+                target: "https://studyaihubt.lovable.app/blog?q={search_term_string}",
+                "query-input": "required name=search_term_string",
+              },
+            },
+          ],
         }),
       },
     ],
