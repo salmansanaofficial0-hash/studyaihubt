@@ -31,19 +31,23 @@ export const Route = createFileRoute("/blog/$slug")({
   head: ({ loaderData }) => {
     const p = loaderData?.post;
     if (!p) return {};
+    const ogImage = "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8f61bf2a-369c-48e5-aba4-d3c305533035/id-preview-4718dce1--844a243d-3c7e-4168-b4d1-c35480effa4a.lovable.app-1779430450090.png";
+    const shortTitle = p.title.length > 50 ? p.title : `${p.title} | StudyAI Hub`;
     return {
       meta: [
-        { title: `${p.title} | StudyAI Hub` },
+        { title: shortTitle },
         { name: "description", content: p.excerpt },
         { property: "og:title", content: p.title },
         { property: "og:description", content: p.excerpt },
         { property: "og:type", content: "article" },
         { property: "og:url", content: `https://studyaihubt.lovable.app/blog/${p.slug}` },
+        { property: "og:image", content: ogImage },
         { property: "article:author", content: p.author },
         { property: "article:published_time", content: p.date },
         { property: "article:section", content: p.category },
         { name: "twitter:title", content: p.title },
         { name: "twitter:description", content: p.excerpt },
+        { name: "twitter:image", content: ogImage },
       ],
       links: [{ rel: "canonical", href: `https://studyaihubt.lovable.app/blog/${p.slug}` }],
       scripts: [
@@ -57,6 +61,7 @@ export const Route = createFileRoute("/blog/$slug")({
                 "@id": `https://studyaihubt.lovable.app/blog/${p.slug}#article`,
                 headline: p.title,
                 description: p.excerpt,
+                image: [ogImage],
                 datePublished: p.date,
                 dateModified: p.date,
                 inLanguage: "en",

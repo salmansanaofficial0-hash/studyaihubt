@@ -15,10 +15,10 @@ export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
-      { title: "StudyAI Hub — Study Smarter With AI, Not Harder" },
-      { name: "description", content: "Discover the best AI tools, study strategies, and productivity hacks built for university students." },
-      { property: "og:title", content: "StudyAI Hub — Study Smarter With AI" },
-      { property: "og:description", content: "AI tools and study tips built for university students." },
+      { title: "AI Tools & Study Tips for University Students | StudyAI Hub" },
+      { name: "description", content: "Discover the best AI tools, study strategies, and productivity hacks built for university students. Honest reviews, real workflows, no hype." },
+      { property: "og:title", content: "AI Tools & Study Tips for University Students" },
+      { property: "og:description", content: "Honest reviews of ChatGPT, Claude, Gemini and Perplexity — plus study workflows that actually work." },
       { property: "og:url", content: "https://studyaihubt.lovable.app/" },
     ],
     links: [{ rel: "canonical", href: "https://studyaihubt.lovable.app/" }],
