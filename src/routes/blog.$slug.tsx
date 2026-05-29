@@ -7,6 +7,7 @@ import { ReadingProgress } from "@/components/ReadingProgress";
 import { PostCard } from "@/components/PostCard";
 import { Toast, useToast } from "@/components/Toast";
 import { AIAssistant } from "@/components/AIAssistant";
+import { BookmarkButton } from "@/components/BookmarkButton";
 import { subscribeToNewsletter } from "@/lib/newsletter";
 import {
   getPostBySlug,
@@ -216,6 +217,17 @@ function BlogPost() {
               <button onClick={copy} className="h-9 w-9 rounded-md bg-muted hover:bg-primary hover:text-primary-foreground inline-flex items-center justify-center transition-colors" aria-label="Copy link">
                 <LinkIcon className="h-4 w-4" />
               </button>
+              <BookmarkButton
+                post={{
+                  slug: post.slug,
+                  title: post.title,
+                  excerpt: post.excerpt,
+                  emoji: post.emoji,
+                  category: post.category,
+                  categorySlug: post.categorySlug,
+                  categoryColor: post.categoryColor,
+                }}
+              />
             </div>
           </header>
 
