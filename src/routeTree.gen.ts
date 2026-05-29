@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BookmarksRouteImport } from './routes/bookmarks'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AiToolsRouteImport } from './routes/ai-tools'
 import { Route as AboutRouteImport } from './routes/about'
@@ -26,6 +27,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookmarksRoute = BookmarksRouteImport.update({
+  id: '/bookmarks',
+  path: '/bookmarks',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogRoute = BlogRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/ai-tools': typeof AiToolsRoute
   '/blog': typeof BlogRouteWithChildren
+  '/bookmarks': typeof BookmarksRoute
   '/contact': typeof ContactRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/ai-tools': typeof AiToolsRoute
   '/blog': typeof BlogRouteWithChildren
+  '/bookmarks': typeof BookmarksRoute
   '/contact': typeof ContactRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/ai-tools': typeof AiToolsRoute
   '/blog': typeof BlogRouteWithChildren
+  '/bookmarks': typeof BookmarksRoute
   '/contact': typeof ContactRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/ai-tools'
     | '/blog'
+    | '/bookmarks'
     | '/contact'
     | '/sitemap.xml'
     | '/blog/$slug'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/ai-tools'
     | '/blog'
+    | '/bookmarks'
     | '/contact'
     | '/sitemap.xml'
     | '/blog/$slug'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/ai-tools'
     | '/blog'
+    | '/bookmarks'
     | '/contact'
     | '/sitemap.xml'
     | '/blog/$slug'
@@ -128,6 +140,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AiToolsRoute: typeof AiToolsRoute
   BlogRoute: typeof BlogRouteWithChildren
+  BookmarksRoute: typeof BookmarksRoute
   ContactRoute: typeof ContactRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   CategorySlugRoute: typeof CategorySlugRoute
@@ -147,6 +160,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bookmarks': {
+      id: '/bookmarks'
+      path: '/bookmarks'
+      fullPath: '/bookmarks'
+      preLoaderRoute: typeof BookmarksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog': {
@@ -209,6 +229,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AiToolsRoute: AiToolsRoute,
   BlogRoute: BlogRouteWithChildren,
+  BookmarksRoute: BookmarksRoute,
   ContactRoute: ContactRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   CategorySlugRoute: CategorySlugRoute,
