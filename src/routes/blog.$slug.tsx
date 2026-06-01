@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Calendar, Clock, Eye, ChevronRight, Twitter, Facebook, Linkedin, Link as LinkIcon, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Calendar, Clock, Eye, ChevronRight, Twitter, Facebook, Linkedin, Link as LinkIcon, ThumbsUp, ThumbsDown, MessageCircle } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { ArticleBody, TableOfContents, extractHeadings } from "@/components/Article";
 import { ReadingProgress } from "@/components/ReadingProgress";
