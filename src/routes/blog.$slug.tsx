@@ -214,6 +214,7 @@ function BlogPost() {
               <ShareBtn href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(url)}`} I={Twitter} label="Twitter" />
               <ShareBtn href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} I={Facebook} label="Facebook" />
               <ShareBtn href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} I={Linkedin} label="LinkedIn" />
+              <ShareBtn href={`https://wa.me/?text=${encodeURIComponent(post.title + " " + url)}`} I={MessageCircle} label="WhatsApp" />
               <button onClick={copy} className="h-9 w-9 rounded-md bg-muted hover:bg-primary hover:text-primary-foreground inline-flex items-center justify-center transition-colors" aria-label="Copy link">
                 <LinkIcon className="h-4 w-4" />
               </button>
