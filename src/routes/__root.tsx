@@ -153,6 +153,7 @@ function RootComponent() {
         <BackToTop />
         <MobileBottomNav />
         <FloatingChat />
+        <NewsletterPopup />
       </div>
     </QueryClientProvider>
   );
