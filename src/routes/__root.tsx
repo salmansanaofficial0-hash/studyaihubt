@@ -14,6 +14,7 @@ import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { FloatingChat } from "@/components/FloatingChat";
+import { NewsletterPopup } from "@/components/NewsletterPopup";
 
 function NotFoundComponent() {
   return (
