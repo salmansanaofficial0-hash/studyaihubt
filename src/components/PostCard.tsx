@@ -1,11 +1,33 @@
+import { memo } from "react";
 import { Link } from "@tanstack/react-router";
 import type { Post } from "@/lib/posts-types";
-import { Clock, Eye } from "lucide-react";
+import { Clock, Eye, Flame, Sparkles } from "lucide-react";
 import { BookmarkButton } from "@/components/BookmarkButton";
 
-export function PostCard({ post, size = "md" }: { post: Post; size?: "sm" | "md" | "lg" }) {
+function isNewPost(iso: string) {
+  const ts = new Date(iso).getTime();
+  if (!ts) return false;
+  return Date.now() - ts <= 7 * 24 * 60 * 60 * 1000;
+}
+
+function PostCardImpl({ post, size = "md" }: { post: Post; size?: "sm" | "md" | "lg" }) {
+  const trending = post.views > 2000;
+  const fresh = isNewPost(post.date);
+
   return (
-    <div className="group relative rounded-2xl bg-card border border-border overflow-hidden hover-lift">
+    <article className="group relative rounded-2xl bg-card border border-border overflow-hidden hover-lift">
+      <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
+        {trending && (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gradient-to-r from-orange-500 to-red-500 text-white shadow">
+            <Flame className="h-3 w-3" /> Trending
+          </span>
+        )}
+        {fresh && (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow">
+            <Sparkles className="h-3 w-3" /> New
+          </span>
+        )}
+      </div>
       <div className="absolute top-3 right-3 z-10">
         <BookmarkButton
           post={{
@@ -19,15 +41,21 @@ export function PostCard({ post, size = "md" }: { post: Post; size?: "sm" | "md"
           }}
         />
       </div>
-      <Link to="/blog/$slug" params={{ slug: post.slug }} className="block">
+      <Link
+        to="/blog/$slug"
+        params={{ slug: post.slug }}
+        className="block"
+        aria-label={`Read: ${post.title}`}
+      >
         <div
           className="aspect-[16/9] flex items-center justify-center text-6xl"
           style={{
             backgroundImage: `linear-gradient(135deg, ${post.categoryColor}33, ${post.categoryColor}11)`,
           }}
-          aria-hidden
+          role="img"
+          aria-label={`${post.category} article illustration`}
         >
-          <span>{post.emoji}</span>
+          <span aria-hidden>{post.emoji}</span>
         </div>
         <div className="p-5">
           <span
@@ -54,9 +82,11 @@ export function PostCard({ post, size = "md" }: { post: Post; size?: "sm" | "md"
           </div>
         </div>
       </Link>
-    </div>
+    </article>
   );
 }
+
+export const PostCard = memo(PostCardImpl);
 
 export function formatViews(n: number) {
   if (n >= 1000) return (n / 1000).toFixed(1) + "k views";
