@@ -109,6 +109,8 @@ function HeroSearch() {
       </button>
     </form>
   );
+}
+
 
 function Stats() {
   const items = [
