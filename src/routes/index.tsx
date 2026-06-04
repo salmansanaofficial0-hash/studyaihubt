@@ -70,6 +70,7 @@ function Hero({ categories }: { categories: Category[] }) {
             Read Latest Posts
           </Link>
         </div>
+        <HeroSearch />
         <div className="mt-10 flex flex-wrap gap-2">
           {categories.slice(0, 4).map((c) => (
             <a key={c.slug} href="#categories" className="px-3 py-1.5 rounded-full text-sm bg-white/15 hover:bg-white/25 backdrop-blur transition-colors">
