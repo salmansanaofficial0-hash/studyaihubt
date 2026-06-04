@@ -22,6 +22,7 @@ export type Post = {
   authorBio: string;
   authorAvatar: string;
   date: string; // ISO
+  updatedAt: string; // ISO
   readingTime: string; // "8 min read"
   readingMinutes: number;
   views: number;

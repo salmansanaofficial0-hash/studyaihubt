@@ -6,6 +6,9 @@ import { getAllPosts, getCategories } from "@/lib/posts.functions";
 import type { Post, Category } from "@/lib/posts-types";
 
 export const Route = createFileRoute("/blog")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    search: typeof search.search === "string" ? search.search : "",
+  }),
   loader: async (): Promise<{ posts: Post[]; categories: Category[] }> => {
     const [posts, categories] = await Promise.all([getAllPosts(), getCategories()]);
     return { posts, categories };
@@ -34,8 +37,9 @@ type Sort = (typeof SORT)[number];
 
 function BlogPage() {
   const { posts, categories } = Route.useLoaderData() as { posts: Post[]; categories: Category[] };
+  const { search: searchParam } = Route.useSearch();
   const [tab, setTab] = useState<string>("All");
-  const [q, setQ] = useState("");
+  const [q, setQ] = useState(searchParam || "");
   const [sort, setSort] = useState<Sort>("Latest");
   const [visible, setVisible] = useState(6);
 

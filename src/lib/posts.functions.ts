@@ -20,6 +20,7 @@ type DbPost = {
   popular: boolean;
   tags: string[];
   created_at: string;
+  updated_at: string;
   categories: { name: string; slug: string; color: string | null; emoji: string | null } | null;
 };
 
@@ -38,6 +39,7 @@ function normalize(p: DbPost): Post {
     authorBio: p.author_bio ?? "",
     authorAvatar: p.author_avatar ?? p.author_name.slice(0, 2).toUpperCase(),
     date: p.created_at,
+    updatedAt: p.updated_at ?? p.created_at,
     readingTime: `${p.reading_time} min read`,
     readingMinutes: p.reading_time,
     views: p.views,
@@ -50,7 +52,7 @@ function normalize(p: DbPost): Post {
 }
 
 const POST_SELECT =
-  "id, slug, title, excerpt, content, author_name, author_bio, author_avatar, cover_emoji, reading_time, views, likes, featured, popular, tags, created_at, categories(name, slug, color, emoji)";
+  "id, slug, title, excerpt, content, author_name, author_bio, author_avatar, cover_emoji, reading_time, views, likes, featured, popular, tags, created_at, updated_at, categories(name, slug, color, emoji)";
 
 export const getAllPosts = createServerFn({ method: "GET" }).handler(async (): Promise<Post[]> => {
   const { data, error } = await supabase

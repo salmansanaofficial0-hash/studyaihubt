@@ -208,6 +208,7 @@ function BlogPost() {
               <span className="text-muted-foreground inline-flex items-center gap-1"><Calendar className="h-3.5 w-3.5" />{formatDate(post.date)}</span>
               <span className="text-muted-foreground inline-flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{post.readingTime}</span>
               <span className="text-muted-foreground inline-flex items-center gap-1"><Eye className="h-3.5 w-3.5" />{post.views.toLocaleString()} views</span>
+              <UpdatedBadge updatedAt={post.updatedAt} createdAt={post.date} />
             </div>
 
             <div className="mt-6 flex gap-2">
@@ -371,4 +372,18 @@ function ShareBtn({ href, I, label }: { href: string; I: typeof Twitter; label: 
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+}
+
+function UpdatedBadge({ updatedAt, createdAt }: { updatedAt: string; createdAt: string }) {
+  const iso = updatedAt || createdAt;
+  const daysSince = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+  const isRecent = daysSince <= 14;
+  const cls = isRecent
+    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+    : "border-border bg-muted text-muted-foreground";
+  return (
+    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs border ${cls}`}>
+      🔄 Updated {formatDate(iso)}
+    </span>
+  );
 }
