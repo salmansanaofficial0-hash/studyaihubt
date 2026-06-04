@@ -52,7 +52,7 @@ function normalize(p: DbPost): Post {
 }
 
 const POST_SELECT =
-  "id, slug, title, excerpt, content, author_name, author_bio, author_avatar, cover_emoji, reading_time, views, likes, featured, popular, tags, created_at, categories(name, slug, color, emoji)";
+  "id, slug, title, excerpt, content, author_name, author_bio, author_avatar, cover_emoji, reading_time, views, likes, featured, popular, tags, created_at, updated_at, categories(name, slug, color, emoji)";
 
 export const getAllPosts = createServerFn({ method: "GET" }).handler(async (): Promise<Post[]> => {
   const { data, error } = await supabase
