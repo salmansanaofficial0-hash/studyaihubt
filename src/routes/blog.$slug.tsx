@@ -208,6 +208,7 @@ function BlogPost() {
               <span className="text-muted-foreground inline-flex items-center gap-1"><Calendar className="h-3.5 w-3.5" />{formatDate(post.date)}</span>
               <span className="text-muted-foreground inline-flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{post.readingTime}</span>
               <span className="text-muted-foreground inline-flex items-center gap-1"><Eye className="h-3.5 w-3.5" />{post.views.toLocaleString()} views</span>
+              <UpdatedBadge updatedAt={post.updatedAt} createdAt={post.date} />
             </div>
 
             <div className="mt-6 flex gap-2">
