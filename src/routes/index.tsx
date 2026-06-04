@@ -83,6 +83,33 @@ function Hero({ categories }: { categories: Category[] }) {
   );
 }
 
+function HeroSearch() {
+  const navigate = useNavigate();
+  const [q, setQ] = useState("");
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        const v = q.trim();
+        if (v) navigate({ to: "/blog", search: { search: v } as never });
+      }}
+      className="mt-8 flex items-center gap-2 max-w-xl bg-white/15 backdrop-blur border border-white/25 rounded-full pl-4 pr-1.5 py-1.5"
+      role="search"
+    >
+      <Search className="h-4 w-4 text-white/80" />
+      <input
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+        placeholder="Search articles, tools, study tips..."
+        aria-label="Search articles"
+        className="flex-1 bg-transparent outline-none text-white placeholder:text-white/70 text-sm py-2"
+      />
+      <button type="submit" className="px-4 py-2 rounded-full bg-white text-primary text-sm font-semibold hover:scale-[1.02] transition-transform">
+        Search
+      </button>
+    </form>
+  );
+
 function Stats() {
   const items = [
     { I: Sparkles, label: "AI Tools Reviewed", value: "50+" },
