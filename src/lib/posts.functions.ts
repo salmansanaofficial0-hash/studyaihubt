@@ -39,6 +39,7 @@ function normalize(p: DbPost): Post {
     authorBio: p.author_bio ?? "",
     authorAvatar: p.author_avatar ?? p.author_name.slice(0, 2).toUpperCase(),
     date: p.created_at,
+    updatedAt: p.updated_at ?? p.created_at,
     readingTime: `${p.reading_time} min read`,
     readingMinutes: p.reading_time,
     views: p.views,
