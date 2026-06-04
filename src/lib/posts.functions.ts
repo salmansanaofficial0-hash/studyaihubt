@@ -20,6 +20,7 @@ type DbPost = {
   popular: boolean;
   tags: string[];
   created_at: string;
+  updated_at: string;
   categories: { name: string; slug: string; color: string | null; emoji: string | null } | null;
 };
 
