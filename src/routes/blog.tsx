@@ -6,6 +6,9 @@ import { getAllPosts, getCategories } from "@/lib/posts.functions";
 import type { Post, Category } from "@/lib/posts-types";
 
 export const Route = createFileRoute("/blog")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    search: typeof search.search === "string" ? search.search : "",
+  }),
   loader: async (): Promise<{ posts: Post[]; categories: Category[] }> => {
     const [posts, categories] = await Promise.all([getAllPosts(), getCategories()]);
     return { posts, categories };
