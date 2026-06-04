@@ -37,8 +37,9 @@ type Sort = (typeof SORT)[number];
 
 function BlogPage() {
   const { posts, categories } = Route.useLoaderData() as { posts: Post[]; categories: Category[] };
+  const { search: searchParam } = Route.useSearch();
   const [tab, setTab] = useState<string>("All");
-  const [q, setQ] = useState("");
+  const [q, setQ] = useState(searchParam || "");
   const [sort, setSort] = useState<Sort>("Latest");
   const [visible, setVisible] = useState(6);
 
