@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight, Sparkles, Star, Users, BookOpen, Clock, Eye } from "lucide-react";
+import { ArrowRight, Search, Sparkles, Star, Users, BookOpen, Clock, Eye } from "lucide-react";
 import { TOOLS } from "@/data/tools";
 import { PostCard, formatViews } from "@/components/PostCard";
 import { subscribeToNewsletter } from "@/lib/newsletter";
