@@ -81,15 +81,17 @@ export function Footer() {
           <FooterCol title="Connect">
             <div className="flex gap-2">
               {[
-                { I: Twitter, l: "Twitter" },
-                { I: Instagram, l: "Instagram" },
-                { I: Youtube, l: "YouTube" },
-                { I: Linkedin, l: "LinkedIn" },
-              ].map(({ I, l }) => (
+                { I: Twitter, l: "Twitter", href: "https://twitter.com/studyaihub" },
+                { I: Instagram, l: "Instagram", href: "https://instagram.com/studyaihub" },
+                { I: Youtube, l: "YouTube", href: "https://youtube.com/@studyaihub" },
+                { I: Linkedin, l: "LinkedIn", href: "https://linkedin.com/company/studyaihub" },
+              ].map(({ I, l, href }) => (
                 <a
                   key={l}
-                  href="#"
-                  aria-label={l}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Follow on ${l}`}
                   className="h-9 w-9 rounded-md bg-muted hover:bg-primary hover:text-primary-foreground inline-flex items-center justify-center transition-colors"
                 >
                   <I className="h-4 w-4" />
