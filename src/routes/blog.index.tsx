@@ -5,7 +5,7 @@ import { PostCard } from "@/components/PostCard";
 import { getAllPosts, getCategories } from "@/lib/posts.functions";
 import type { Post, Category } from "@/lib/posts-types";
 
-export const Route = createFileRoute("/blog")({
+export const Route = createFileRoute("/blog/")({
   validateSearch: (search: Record<string, unknown>) => ({
     search: typeof search.search === "string" ? search.search : "",
   }),
