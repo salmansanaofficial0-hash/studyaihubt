@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as NewsletterConfirmedRouteImport } from './routes/newsletter-confirmed'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BookmarksRouteImport } from './routes/bookmarks'
 import { Route as AiToolsRouteImport } from './routes/ai-tools'
@@ -22,6 +23,11 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsletterConfirmedRoute = NewsletterConfirmedRouteImport.update({
+  id: '/newsletter-confirmed',
+  path: '/newsletter-confirmed',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/ai-tools': typeof AiToolsRoute
   '/bookmarks': typeof BookmarksRoute
   '/contact': typeof ContactRoute
+  '/newsletter-confirmed': typeof NewsletterConfirmedRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/ai-tools': typeof AiToolsRoute
   '/bookmarks': typeof BookmarksRoute
   '/contact': typeof ContactRoute
+  '/newsletter-confirmed': typeof NewsletterConfirmedRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/ai-tools': typeof AiToolsRoute
   '/bookmarks': typeof BookmarksRoute
   '/contact': typeof ContactRoute
+  '/newsletter-confirmed': typeof NewsletterConfirmedRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
     | '/ai-tools'
     | '/bookmarks'
     | '/contact'
+    | '/newsletter-confirmed'
     | '/sitemap.xml'
     | '/blog/$slug'
     | '/category/$slug'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/ai-tools'
     | '/bookmarks'
     | '/contact'
+    | '/newsletter-confirmed'
     | '/sitemap.xml'
     | '/blog/$slug'
     | '/category/$slug'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/ai-tools'
     | '/bookmarks'
     | '/contact'
+    | '/newsletter-confirmed'
     | '/sitemap.xml'
     | '/blog/$slug'
     | '/category/$slug'
@@ -141,6 +153,7 @@ export interface RootRouteChildren {
   AiToolsRoute: typeof AiToolsRoute
   BookmarksRoute: typeof BookmarksRoute
   ContactRoute: typeof ContactRoute
+  NewsletterConfirmedRoute: typeof NewsletterConfirmedRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CategorySlugRoute: typeof CategorySlugRoute
@@ -154,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/newsletter-confirmed': {
+      id: '/newsletter-confirmed'
+      path: '/newsletter-confirmed'
+      fullPath: '/newsletter-confirmed'
+      preLoaderRoute: typeof NewsletterConfirmedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -221,6 +241,7 @@ const rootRouteChildren: RootRouteChildren = {
   AiToolsRoute: AiToolsRoute,
   BookmarksRoute: BookmarksRoute,
   ContactRoute: ContactRoute,
+  NewsletterConfirmedRoute: NewsletterConfirmedRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   BlogSlugRoute: BlogSlugRoute,
   CategorySlugRoute: CategorySlugRoute,
