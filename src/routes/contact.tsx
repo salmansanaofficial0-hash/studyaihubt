@@ -12,9 +12,9 @@ export const Route = createFileRoute("/contact")({
       { name: "description", content: "Get in touch with the StudyAI Hub team — questions, feedback, or collaboration." },
       { property: "og:title", content: "Contact — StudyAI Hub" },
       { property: "og:description", content: "Send us a message. We reply within 24 hours." },
-      { property: "og:url", content: "https://studyaihubt.lovable.app/contact" },
+      { property: "og:url", content: "https://studyaihub.tech/contact" },
     ],
-    links: [{ rel: "canonical", href: "https://studyaihubt.lovable.app/contact" }],
+    links: [{ rel: "canonical", href: "https://studyaihub.tech/contact" }],
   }),
 });
 

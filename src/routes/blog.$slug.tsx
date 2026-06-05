@@ -41,7 +41,7 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "og:title", content: p.title },
         { property: "og:description", content: p.excerpt },
         { property: "og:type", content: "article" },
-        { property: "og:url", content: `https://studyaihubt.lovable.app/blog/${p.slug}` },
+        { property: "og:url", content: `https://studyaihub.tech/blog/${p.slug}` },
         { property: "og:image", content: ogImage },
         { property: "article:author", content: p.author },
         { property: "article:published_time", content: p.date },
@@ -50,7 +50,7 @@ export const Route = createFileRoute("/blog/$slug")({
         { name: "twitter:description", content: p.excerpt },
         { name: "twitter:image", content: ogImage },
       ],
-      links: [{ rel: "canonical", href: `https://studyaihubt.lovable.app/blog/${p.slug}` }],
+      links: [{ rel: "canonical", href: `https://studyaihub.tech/blog/${p.slug}` }],
       scripts: [
         {
           type: "application/ld+json",
@@ -59,14 +59,14 @@ export const Route = createFileRoute("/blog/$slug")({
             "@graph": [
               {
                 "@type": "BlogPosting",
-                "@id": `https://studyaihubt.lovable.app/blog/${p.slug}#article`,
+                "@id": `https://studyaihub.tech/blog/${p.slug}#article`,
                 headline: p.title,
                 description: p.excerpt,
                 image: [ogImage],
                 datePublished: p.date,
                 dateModified: p.date,
                 inLanguage: "en",
-                mainEntityOfPage: `https://studyaihubt.lovable.app/blog/${p.slug}`,
+                mainEntityOfPage: `https://studyaihub.tech/blog/${p.slug}`,
                 articleSection: p.category,
                 keywords: p.tags.join(", "),
                 author: {
@@ -74,15 +74,15 @@ export const Route = createFileRoute("/blog/$slug")({
                   name: p.author,
                   description: p.authorBio,
                 },
-                publisher: { "@id": "https://studyaihubt.lovable.app/#organization" },
+                publisher: { "@id": "https://studyaihub.tech/#organization" },
               },
               {
                 "@type": "BreadcrumbList",
                 itemListElement: [
-                  { "@type": "ListItem", position: 1, name: "Home", item: "https://studyaihubt.lovable.app/" },
-                  { "@type": "ListItem", position: 2, name: "Blog", item: "https://studyaihubt.lovable.app/blog" },
-                  { "@type": "ListItem", position: 3, name: p.category, item: `https://studyaihubt.lovable.app/category/${p.categorySlug}` },
-                  { "@type": "ListItem", position: 4, name: p.title, item: `https://studyaihubt.lovable.app/blog/${p.slug}` },
+                  { "@type": "ListItem", position: 1, name: "Home", item: "https://studyaihub.tech/" },
+                  { "@type": "ListItem", position: 2, name: "Blog", item: "https://studyaihub.tech/blog" },
+                  { "@type": "ListItem", position: 3, name: p.category, item: `https://studyaihub.tech/category/${p.categorySlug}` },
+                  { "@type": "ListItem", position: 4, name: p.title, item: `https://studyaihub.tech/blog/${p.slug}` },
                 ],
               },
             ],

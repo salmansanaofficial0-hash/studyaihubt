@@ -11,9 +11,9 @@ export const Route = createFileRoute("/ai-tools")({
       { name: "description", content: "Curated directory of the best AI tools for university students: writing, research, presentations and productivity." },
       { property: "og:title", content: "Best AI Tools for Students in 2025" },
       { property: "og:description", content: "Free and paid AI tools, reviewed for university students." },
-      { property: "og:url", content: "https://studyaihubt.lovable.app/ai-tools" },
+      { property: "og:url", content: "https://studyaihub.tech/ai-tools" },
     ],
-    links: [{ rel: "canonical", href: "https://studyaihubt.lovable.app/ai-tools" }],
+    links: [{ rel: "canonical", href: "https://studyaihub.tech/ai-tools" }],
   }),
 });
 

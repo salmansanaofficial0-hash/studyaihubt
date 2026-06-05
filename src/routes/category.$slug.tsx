@@ -18,9 +18,9 @@ export const Route = createFileRoute("/category/$slug")({
         { name: "description", content: c.description },
         { property: "og:title", content: `${c.name} — StudyAI Hub` },
         { property: "og:description", content: c.description },
-        { property: "og:url", content: `https://studyaihubt.lovable.app/category/${c.slug}` },
+        { property: "og:url", content: `https://studyaihub.tech/category/${c.slug}` },
       ],
-      links: [{ rel: "canonical", href: `https://studyaihubt.lovable.app/category/${c.slug}` }],
+      links: [{ rel: "canonical", href: `https://studyaihub.tech/category/${c.slug}` }],
     };
   },
   component: CategoryPage,

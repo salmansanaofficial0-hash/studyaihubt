@@ -19,9 +19,9 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Discover the best AI tools, study strategies, and productivity hacks built for university students. Honest reviews, real workflows, no hype." },
       { property: "og:title", content: "AI Tools & Study Tips for University Students" },
       { property: "og:description", content: "Honest reviews of ChatGPT, Claude, Gemini and Perplexity — plus study workflows that actually work." },
-      { property: "og:url", content: "https://studyaihubt.lovable.app/" },
+      { property: "og:url", content: "https://studyaihub.tech/" },
     ],
-    links: [{ rel: "canonical", href: "https://studyaihubt.lovable.app/" }],
+    links: [{ rel: "canonical", href: "https://studyaihub.tech/" }],
   }),
   errorComponent: ({ error }) => (
     <div className="max-w-xl mx-auto px-4 py-24 text-center">
