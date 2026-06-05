@@ -50,5 +50,5 @@ Allow: /
 User-agent: DuckAssistBot
 Allow: /
 
-Sitemap: https://studyaihubt.lovable.app/sitemap.xml
-Host: https://studyaihubt.lovable.app
+Sitemap: https://studyaihub.tech/sitemap.xml
+Host: https://studyaihub.tech

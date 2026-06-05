@@ -85,12 +85,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@graph": [
             {
               "@type": "Organization",
-              "@id": "https://studyaihubt.lovable.app/#organization",
+              "@id": "https://studyaihub.tech/#organization",
               name: "StudyAI Hub",
-              url: "https://studyaihubt.lovable.app",
+              url: "https://studyaihub.tech",
               logo: {
                 "@type": "ImageObject",
-                url: "https://studyaihubt.lovable.app/favicon.ico",
+                url: "https://studyaihub.tech/favicon.ico",
               },
               description: "AI tools and study tips for university students.",
               sameAs: [
@@ -101,15 +101,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             },
             {
               "@type": "WebSite",
-              "@id": "https://studyaihubt.lovable.app/#website",
+              "@id": "https://studyaihub.tech/#website",
               name: "StudyAI Hub",
-              url: "https://studyaihubt.lovable.app",
+              url: "https://studyaihub.tech",
               description: "AI tools and study tips for university students.",
               inLanguage: "en",
-              publisher: { "@id": "https://studyaihubt.lovable.app/#organization" },
+              publisher: { "@id": "https://studyaihub.tech/#organization" },
               potentialAction: {
                 "@type": "SearchAction",
-                target: "https://studyaihubt.lovable.app/blog?q={search_term_string}",
+                target: "https://studyaihub.tech/blog?q={search_term_string}",
                 "query-input": "required name=search_term_string",
               },
             },

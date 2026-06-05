@@ -20,9 +20,9 @@ export const Route = createFileRoute("/blog/")({
       { name: "description", content: "Browse every article on StudyAI Hub: AI tools, study tips, productivity, business, and tech." },
       { property: "og:title", content: "All Articles — StudyAI Hub" },
       { property: "og:description", content: "Articles on AI tools, study tips and productivity for students." },
-      { property: "og:url", content: "https://studyaihubt.lovable.app/blog" },
+      { property: "og:url", content: "https://studyaihub.tech/blog" },
     ],
-    links: [{ rel: "canonical", href: "https://studyaihubt.lovable.app/blog" }],
+    links: [{ rel: "canonical", href: "https://studyaihub.tech/blog" }],
   }),
   errorComponent: ({ error }) => (
     <div className="max-w-xl mx-auto px-4 py-24 text-center">
