@@ -6,6 +6,9 @@ import { PostCard, formatViews } from "@/components/PostCard";
 import { subscribeToNewsletter } from "@/lib/newsletter";
 import { getAllPosts, getCategories } from "@/lib/posts.functions";
 import type { Post, Category } from "@/lib/posts-types";
+import { ToolOfTheWeek } from "@/components/ToolOfTheWeek";
+import { AnimatedStat } from "@/components/AnimatedStat";
+import { ExamSeasonBanner } from "@/components/ExamSeasonBanner";
 
 export const Route = createFileRoute("/")({
   loader: async (): Promise<{ posts: Post[]; categories: Category[] }> => {
@@ -37,10 +40,11 @@ function HomePage() {
     <>
       <Hero categories={categories} />
       <Stats />
+      <ExamSeasonBanner />
       <FeaturedCategories categories={categories} posts={posts} />
       <FeaturedPosts posts={posts} />
       <PopularPosts posts={posts} />
-      <ToolsSpotlight />
+      <ToolOfTheWeek />
       <NewsletterCTA />
       <Testimonials />
     </>
@@ -114,23 +118,15 @@ function HeroSearch() {
 
 function Stats() {
   const items = [
-    { I: Sparkles, label: "AI Tools Reviewed", value: "50+" },
-    { I: Users, label: "Students Helped", value: "10,000+" },
-    { I: BookOpen, label: "Study Guides", value: "100+" },
+    { I: Sparkles, label: "AI Tools Reviewed", value: 50 },
+    { I: Users, label: "Students Helped", value: 10000 },
+    { I: BookOpen, label: "Study Guides", value: 100 },
   ];
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-10">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {items.map((it) => (
-          <div key={it.label} className="glass rounded-2xl p-5 flex items-center gap-4">
-            <span className="h-12 w-12 rounded-xl bg-gradient-brand text-white inline-flex items-center justify-center">
-              <it.I className="h-5 w-5" />
-            </span>
-            <div>
-              <p className="text-2xl font-bold">{it.value}</p>
-              <p className="text-xs text-muted-foreground">{it.label}</p>
-            </div>
-          </div>
+          <AnimatedStat key={it.label} target={it.value} label={it.label} Icon={it.I} />
         ))}
       </div>
     </section>

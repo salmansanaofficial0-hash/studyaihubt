@@ -15,6 +15,7 @@ import { BackToTop } from "@/components/BackToTop";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { FloatingChat } from "@/components/FloatingChat";
 import { NewsletterPopup } from "@/components/NewsletterPopup";
+import { StickyNewsletterBar } from "@/components/StickyNewsletterBar";
 
 function NotFoundComponent() {
   return (
@@ -154,6 +155,7 @@ function RootComponent() {
         <MobileBottomNav />
         <FloatingChat />
         <NewsletterPopup />
+        <StickyNewsletterBar />
       </div>
     </QueryClientProvider>
   );

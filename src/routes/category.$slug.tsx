@@ -47,12 +47,25 @@ function CategoryPage() {
         style={{ backgroundImage: `linear-gradient(135deg, ${category.color}cc, ${category.color}66)` }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
-          <p className="text-sm font-medium opacity-90">Category</p>
-          <h1 className="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight">
-            {category.emoji} {category.name}
-          </h1>
-          <p className="mt-3 max-w-2xl text-white/90">{category.description}</p>
-          <p className="mt-4 text-sm text-white/80">{posts.length} {posts.length === 1 ? "article" : "articles"}</p>
+          <nav className="text-xs flex items-center gap-1.5 text-white/80" aria-label="Breadcrumb">
+            <Link to="/" className="hover:text-white">Home</Link>
+            <span>›</span>
+            <Link to="/blog" className="hover:text-white">Categories</Link>
+            <span>›</span>
+            <span className="text-white">{category.name}</span>
+          </nav>
+          <div className="mt-4 flex items-start gap-5">
+            <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-white/15 backdrop-blur inline-flex items-center justify-center text-4xl sm:text-5xl shrink-0">
+              {category.emoji}
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">{category.name}</h1>
+              <p className="mt-3 max-w-2xl text-white/90">{category.description}</p>
+              <span className="mt-4 inline-flex items-center px-3 py-1 rounded-full bg-white/15 backdrop-blur text-sm font-medium">
+                {posts.length} {posts.length === 1 ? "article" : "articles"}
+              </span>
+            </div>
+          </div>
         </div>
       </section>
 
