@@ -8,6 +8,7 @@ import { PostCard } from "@/components/PostCard";
 import { Toast, useToast } from "@/components/Toast";
 import { AIAssistant } from "@/components/AIAssistant";
 import { BookmarkButton } from "@/components/BookmarkButton";
+import { KeyTakeaways } from "@/components/KeyTakeaways";
 import { subscribeToNewsletter } from "@/lib/newsletter";
 import {
   getPostBySlug,
@@ -239,6 +240,7 @@ function BlogPost() {
                 {post.emoji}
               </div>
 
+              <KeyTakeaways content={post.content} />
               <ArticleBody content={post.content} />
 
               <div className="mt-12 flex flex-wrap gap-2">

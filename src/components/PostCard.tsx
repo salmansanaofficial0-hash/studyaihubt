@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Link } from "@tanstack/react-router";
 import type { Post } from "@/lib/posts-types";
-import { Clock, Eye, Flame, Sparkles } from "lucide-react";
+import { Clock, Eye, Flame, Sparkles, Zap } from "lucide-react";
 import { BookmarkButton } from "@/components/BookmarkButton";
 
 function isNewPost(iso: string) {
@@ -13,6 +13,7 @@ function isNewPost(iso: string) {
 function PostCardImpl({ post, size = "md" }: { post: Post; size?: "sm" | "md" | "lg" }) {
   const trending = post.views > 2000;
   const fresh = isNewPost(post.date);
+  const quickRead = post.readingMinutes > 0 && post.readingMinutes <= 5;
 
   return (
     <article className="group relative rounded-2xl bg-card border border-border overflow-hidden hover-lift">
@@ -25,6 +26,11 @@ function PostCardImpl({ post, size = "md" }: { post: Post; size?: "sm" | "md" | 
         {fresh && (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow">
             <Sparkles className="h-3 w-3" /> New
+          </span>
+        )}
+        {quickRead && (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gradient-to-r from-yellow-400 to-amber-500 text-white shadow">
+            <Zap className="h-3 w-3" /> Quick Read
           </span>
         )}
       </div>
