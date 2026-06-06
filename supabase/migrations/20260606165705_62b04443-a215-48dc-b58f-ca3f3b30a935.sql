@@ -1,0 +1,1 @@
+UPDATE public.posts SET views = floor(random() * 3000 + 500)::int WHERE views = 0;
