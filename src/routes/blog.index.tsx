@@ -100,7 +100,24 @@ function BlogPage() {
         {shown.map((p) => <PostCard key={p.id} post={p} />)}
       </div>
 
-      {filtered.length === 0 && <p className="text-center text-muted-foreground py-16">No articles match your search.</p>}
+      {filtered.length === 0 && (
+        <div className="text-center py-20 max-w-md mx-auto">
+          <div className="text-7xl mb-4" aria-hidden>🔍</div>
+          <h2 className="text-xl font-bold">No posts found</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            We couldn't find articles matching <span className="font-medium text-foreground">"{q}"</span>.
+            Try a broader keyword like <button onClick={() => setQ("AI")} className="text-primary underline">"AI"</button>,
+            <button onClick={() => setQ("study")} className="text-primary underline ml-1">"study"</button>, or
+            <button onClick={() => setQ("productivity")} className="text-primary underline ml-1">"productivity"</button>.
+          </p>
+          <button
+            onClick={() => { setQ(""); setTab("All"); }}
+            className="mt-6 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium"
+          >
+            Clear filters
+          </button>
+        </div>
+      )}
 
       {visible < filtered.length && (
         <div className="mt-10 text-center">
