@@ -25,7 +25,7 @@ function AIToolsPage() {
   const tools = useMemo(() => {
     if (f === "All") return TOOLS;
     if (f === "Free") return TOOLS.filter((t) => t.pricing === "Free" || t.pricing === "Freemium");
-    if (f === "Paid") return TOOLS.filter((t) => t.pricing === "Paid" || t.pricing === "Freemium");
+    if (f === "Paid") return TOOLS.filter((t) => t.pricing === "Paid");
     return TOOLS.filter((t) => t.category === f);
   }, [f]);
 

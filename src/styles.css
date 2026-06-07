@@ -188,6 +188,14 @@
     line-height: 1.8;
     margin-bottom: 1.1rem;
     color: var(--foreground);
+    font-size: 1rem;
+  }
+  @media (max-width: 768px) {
+    .prose-article p,
+    .prose-article li {
+      font-size: 16px;
+      line-height: 1.7;
+    }
   }
   .prose-article ul {
     margin: 1rem 0 1.25rem 0;

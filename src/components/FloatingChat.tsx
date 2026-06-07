@@ -11,9 +11,22 @@ const GREETING: Msg = {
     "Hi! I'm StudyBot 👋 Ask me about AI tools for studying, productivity tips, exam prep, or anything else to study smarter.",
 };
 
+const STORAGE_KEY = "studybot_history_v1";
+
 export function FloatingChat() {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Msg[]>([GREETING]);
+  const [messages, setMessages] = useState<Msg[]>(() => {
+    if (typeof window === "undefined") return [GREETING];
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [GREETING];
+      const parsed = JSON.parse(raw) as Msg[];
+      if (!Array.isArray(parsed) || parsed.length === 0) return [GREETING];
+      return parsed;
+    } catch {
+      return [GREETING];
+    }
+  });
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -23,6 +36,17 @@ export function FloatingChat() {
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages, loading, open]);
+
+  // Persist last 5 messages (plus greeting) across navigations
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const toStore = messages.length <= 6 ? messages : [GREETING, ...messages.slice(-5)];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(toStore));
+    } catch {
+      /* ignore quota errors */
+    }
+  }, [messages]);
 
   async function send(e: React.FormEvent) {
     e.preventDefault();

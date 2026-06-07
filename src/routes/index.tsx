@@ -18,10 +18,10 @@ export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
-      { title: "AI Tools & Study Tips for University Students | StudyAI Hub" },
-      { name: "description", content: "Discover the best AI tools, study strategies, and productivity hacks built for university students. Honest reviews, real workflows, no hype." },
-      { property: "og:title", content: "AI Tools & Study Tips for University Students" },
-      { property: "og:description", content: "Honest reviews of ChatGPT, Claude, Gemini and Perplexity — plus study workflows that actually work." },
+      { title: "AI Tools & Study Tips for Pakistani University Students | StudyAI Hub" },
+      { name: "description", content: "StudyAI Hub helps Pakistani university students study smarter with honest AI tool reviews, productivity workflows, and exam strategies. Built for students in Karachi, Lahore, Islamabad and beyond." },
+      { property: "og:title", content: "AI Tools & Study Tips for Pakistani University Students" },
+      { property: "og:description", content: "Honest reviews of ChatGPT, Claude, Gemini and Perplexity — plus study workflows that actually work for Pakistani students." },
       { property: "og:url", content: "https://studyaihub.tech/" },
     ],
     links: [{ rel: "canonical", href: "https://studyaihub.tech/" }],

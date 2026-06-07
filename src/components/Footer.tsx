@@ -101,9 +101,13 @@ export function Footer() {
           </FooterCol>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-border text-xs text-muted-foreground flex flex-wrap gap-2 justify-between">
-          <p>© 2025 StudyAI Hub. Made for students, by students.</p>
-          <p>Built with ☕ in Karachi.</p>
+        <div className="mt-12 pt-6 border-t border-border text-xs text-muted-foreground flex flex-wrap gap-x-4 gap-y-2 justify-between items-center">
+          <p>© 2026 StudyAI Hub. Made for students, by students.</p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <Link to="/privacy-policy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
+            <Link to="/disclaimer" className="hover:text-foreground transition-colors">Disclaimer</Link>
+            <span>Built with ☕ in Karachi.</span>
+          </div>
         </div>
       </div>
     </footer>

@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Calendar, Clock, Eye, ChevronRight, Twitter, Facebook, Linkedin, Link as LinkIcon, ThumbsUp, ThumbsDown, MessageCircle } from "lucide-react";
+import { Calendar, Clock, Eye, ChevronRight, Twitter, Facebook, Linkedin, Link as LinkIcon, ThumbsUp, ThumbsDown, MessageCircle, ArrowLeft } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { ArticleBody, TableOfContents, extractHeadings } from "@/components/Article";
 import { ReadingProgress } from "@/components/ReadingProgress";
@@ -182,6 +182,12 @@ function BlogPost() {
       <ReadingProgress />
       <article className="pt-20 md:pt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-primary transition-colors mb-4"
+          >
+            <ArrowLeft className="h-4 w-4" /> Back to Blog
+          </Link>
           <nav className="text-xs text-muted-foreground flex items-center gap-1 flex-wrap" aria-label="Breadcrumb">
             <Link to="/" className="hover:text-foreground">Home</Link>
             <ChevronRight className="h-3 w-3" />

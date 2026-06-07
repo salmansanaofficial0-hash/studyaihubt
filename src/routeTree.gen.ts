@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as NewsletterConfirmedRouteImport } from './routes/newsletter-confirmed'
+import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BookmarksRouteImport } from './routes/bookmarks'
 import { Route as AiToolsRouteImport } from './routes/ai-tools'
@@ -25,9 +27,19 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NewsletterConfirmedRoute = NewsletterConfirmedRouteImport.update({
   id: '/newsletter-confirmed',
   path: '/newsletter-confirmed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DisclaimerRoute = DisclaimerRouteImport.update({
+  id: '/disclaimer',
+  path: '/disclaimer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -77,7 +89,9 @@ export interface FileRoutesByFullPath {
   '/ai-tools': typeof AiToolsRoute
   '/bookmarks': typeof BookmarksRoute
   '/contact': typeof ContactRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/newsletter-confirmed': typeof NewsletterConfirmedRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
@@ -89,7 +103,9 @@ export interface FileRoutesByTo {
   '/ai-tools': typeof AiToolsRoute
   '/bookmarks': typeof BookmarksRoute
   '/contact': typeof ContactRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/newsletter-confirmed': typeof NewsletterConfirmedRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
@@ -102,7 +118,9 @@ export interface FileRoutesById {
   '/ai-tools': typeof AiToolsRoute
   '/bookmarks': typeof BookmarksRoute
   '/contact': typeof ContactRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/newsletter-confirmed': typeof NewsletterConfirmedRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
@@ -116,7 +134,9 @@ export interface FileRouteTypes {
     | '/ai-tools'
     | '/bookmarks'
     | '/contact'
+    | '/disclaimer'
     | '/newsletter-confirmed'
+    | '/privacy-policy'
     | '/sitemap.xml'
     | '/blog/$slug'
     | '/category/$slug'
@@ -128,7 +148,9 @@ export interface FileRouteTypes {
     | '/ai-tools'
     | '/bookmarks'
     | '/contact'
+    | '/disclaimer'
     | '/newsletter-confirmed'
+    | '/privacy-policy'
     | '/sitemap.xml'
     | '/blog/$slug'
     | '/category/$slug'
@@ -140,7 +162,9 @@ export interface FileRouteTypes {
     | '/ai-tools'
     | '/bookmarks'
     | '/contact'
+    | '/disclaimer'
     | '/newsletter-confirmed'
+    | '/privacy-policy'
     | '/sitemap.xml'
     | '/blog/$slug'
     | '/category/$slug'
@@ -153,7 +177,9 @@ export interface RootRouteChildren {
   AiToolsRoute: typeof AiToolsRoute
   BookmarksRoute: typeof BookmarksRoute
   ContactRoute: typeof ContactRoute
+  DisclaimerRoute: typeof DisclaimerRoute
   NewsletterConfirmedRoute: typeof NewsletterConfirmedRoute
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CategorySlugRoute: typeof CategorySlugRoute
@@ -169,11 +195,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/newsletter-confirmed': {
       id: '/newsletter-confirmed'
       path: '/newsletter-confirmed'
       fullPath: '/newsletter-confirmed'
       preLoaderRoute: typeof NewsletterConfirmedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/disclaimer': {
+      id: '/disclaimer'
+      path: '/disclaimer'
+      fullPath: '/disclaimer'
+      preLoaderRoute: typeof DisclaimerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -241,7 +281,9 @@ const rootRouteChildren: RootRouteChildren = {
   AiToolsRoute: AiToolsRoute,
   BookmarksRoute: BookmarksRoute,
   ContactRoute: ContactRoute,
+  DisclaimerRoute: DisclaimerRoute,
   NewsletterConfirmedRoute: NewsletterConfirmedRoute,
+  PrivacyPolicyRoute: PrivacyPolicyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   BlogSlugRoute: BlogSlugRoute,
   CategorySlugRoute: CategorySlugRoute,
