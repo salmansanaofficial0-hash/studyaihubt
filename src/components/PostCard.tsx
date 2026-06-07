@@ -7,7 +7,7 @@ import { BookmarkButton } from "@/components/BookmarkButton";
 function isNewPost(iso: string) {
   const ts = new Date(iso).getTime();
   if (!ts) return false;
-  return Date.now() - ts <= 7 * 24 * 60 * 60 * 1000;
+  return Date.now() - ts <= 14 * 24 * 60 * 60 * 1000;
 }
 
 function PostCardImpl({ post, size = "md" }: { post: Post; size?: "sm" | "md" | "lg" }) {
