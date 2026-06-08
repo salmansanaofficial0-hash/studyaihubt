@@ -94,6 +94,23 @@ function BlogPage() {
         </select>
       </div>
 
+      {!q && (
+        <div className="mb-6">
+          <p className="text-xs text-muted-foreground mb-2">Popular searches</p>
+          <div className="flex flex-wrap gap-2">
+            {SUGGESTIONS.map((s) => (
+              <button
+                key={s}
+                onClick={() => setQ(s)}
+                className="px-3 py-1 rounded-full text-xs bg-muted hover:bg-primary hover:text-primary-foreground transition-colors"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 mb-8">
         {tabs.map((t) => (
           <button
