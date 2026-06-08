@@ -376,6 +376,19 @@ function BlogPost() {
               </div>
             </section>
           )}
+
+          {alsoRead.length > 0 && (
+            <section className="mt-16">
+              <h2 className="text-2xl font-extrabold tracking-tight mb-6">Students Also Read</h2>
+              <div className="flex gap-5 overflow-x-auto no-scrollbar -mx-4 px-4 pb-3 snap-x snap-mandatory">
+                {alsoRead.map((p) => (
+                  <div key={p.id} className="snap-start shrink-0 w-[280px] sm:w-[300px]">
+                    <PostCard post={p} />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </article>
       {msg && <Toast message={msg} />}
