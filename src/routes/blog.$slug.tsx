@@ -9,6 +9,7 @@ import { Toast, useToast } from "@/components/Toast";
 import { AIAssistant } from "@/components/AIAssistant";
 import { BookmarkButton } from "@/components/BookmarkButton";
 import { KeyTakeaways } from "@/components/KeyTakeaways";
+import { DifficultyBadge } from "@/components/DifficultyBadge";
 import { subscribeToNewsletter } from "@/lib/newsletter";
 import {
   getPostBySlug,
@@ -125,6 +126,10 @@ function BlogPost() {
   const { msg, show } = useToast();
   const related = allPosts.filter((p) => p.categorySlug === post.categorySlug && p.id !== post.id).slice(0, 3);
   const sidebarPopular = allPosts.filter((p) => p.categorySlug === post.categorySlug && p.id !== post.id).slice(0, 4);
+  const alsoRead = allPosts
+    .filter((p) => p.id !== post.id && p.categorySlug !== post.categorySlug)
+    .sort((a, b) => b.views - a.views)
+    .slice(0, 4);
   const url = typeof window !== "undefined" ? window.location.href : `/blog/${post.slug}`;
 
   const incView = useServerFn(incrementPostView);
@@ -180,7 +185,12 @@ function BlogPost() {
   return (
     <>
       <ReadingProgress />
-      <article className="pt-20 md:pt-24">
+      <article className="pt-20 md:pt-24 relative">
+        <div
+          className="absolute top-0 inset-x-0 h-[420px] -z-10 pointer-events-none"
+          style={{ background: `linear-gradient(180deg, ${post.categoryColor}22 0%, transparent 100%)` }}
+          aria-hidden
+        />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             to="/blog"
@@ -199,9 +209,12 @@ function BlogPost() {
           </nav>
 
           <header className="mt-6 max-w-4xl">
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: `${post.categoryColor}22`, color: post.categoryColor }}>
-              {post.category}
-            </span>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: `${post.categoryColor}22`, color: post.categoryColor }}>
+                {post.category}
+              </span>
+              <DifficultyBadge level={post.difficulty} size="md" />
+            </div>
             <h1 className="mt-4 text-3xl md:text-5xl font-extrabold tracking-tight leading-[1.1]">{post.title}</h1>
             <p className="mt-4 text-lg text-muted-foreground">{post.excerpt}</p>
 
