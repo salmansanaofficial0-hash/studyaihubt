@@ -31,4 +31,5 @@ export type Post = {
   featured: boolean;
   popular: boolean;
   emoji: string;
+  difficulty: "Beginner" | "Intermediate" | "Advanced";
 };

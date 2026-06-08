@@ -19,6 +19,7 @@ type DbPost = {
   featured: boolean;
   popular: boolean;
   tags: string[];
+  difficulty: string | null;
   created_at: string;
   updated_at: string;
   categories: { name: string; slug: string; color: string | null; emoji: string | null } | null;
@@ -26,6 +27,9 @@ type DbPost = {
 
 function normalize(p: DbPost): Post {
   const cat = p.categories;
+  const diff = (p.difficulty === "Intermediate" || p.difficulty === "Advanced" || p.difficulty === "Beginner")
+    ? p.difficulty
+    : "Beginner";
   return {
     id: p.id,
     slug: p.slug,
@@ -48,11 +52,12 @@ function normalize(p: DbPost): Post {
     featured: p.featured,
     popular: p.popular,
     emoji: p.cover_emoji ?? "📚",
+    difficulty: diff,
   };
 }
 
 const POST_SELECT =
-  "id, slug, title, excerpt, content, author_name, author_bio, author_avatar, cover_emoji, reading_time, views, likes, featured, popular, tags, created_at, updated_at, categories(name, slug, color, emoji)";
+  "id, slug, title, excerpt, content, author_name, author_bio, author_avatar, cover_emoji, reading_time, views, likes, featured, popular, tags, difficulty, created_at, updated_at, categories(name, slug, color, emoji)";
 
 export const getAllPosts = createServerFn({ method: "GET" }).handler(async (): Promise<Post[]> => {
   const { data, error } = await supabase

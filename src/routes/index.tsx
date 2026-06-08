@@ -64,7 +64,7 @@ function Hero({ categories }: { categories: Category[] }) {
           Study Smarter With AI — <span className="text-white/90 italic">Not Harder.</span>
         </h1>
         <p className="mt-5 text-lg md:text-xl text-white/85 max-w-2xl">
-          Discover the best AI tools, study strategies, and productivity hacks built for university students.
+          The honest guide to AI tools, study strategies, and productivity hacks for university students. Written by a real BBA student in Karachi.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link to="/ai-tools" className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-white text-primary font-semibold hover:scale-[1.02] transition-transform">
@@ -247,7 +247,10 @@ function NewsletterCTA() {
                   setLoading(true);
                   const res = await subscribeToNewsletter(email, "home_cta");
                   setLoading(false);
-                  if (res.ok) { setOk(true); setEmail(""); }
+                  if (res.ok) {
+                    setOk(true); setEmail("");
+                    if (typeof window !== "undefined") window.location.href = "/newsletter-confirmed";
+                  }
                   else setErr(res.error || "Something went wrong.");
                 }}
                 className="mt-6 flex flex-col sm:flex-row gap-2 max-w-lg"

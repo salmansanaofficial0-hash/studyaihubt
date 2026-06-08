@@ -61,8 +61,8 @@ export function NewsletterPopup() {
       setStatus("success");
       if (typeof window !== "undefined") {
         localStorage.setItem(STORAGE_KEY, "subscribed");
+        window.location.href = "/newsletter-confirmed";
       }
-      setTimeout(() => setShow(false), 2500);
     } else {
       setStatus("error");
       setErrorMsg(result.error || "Something went wrong. Try again.");

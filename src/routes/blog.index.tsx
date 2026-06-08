@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Clock } from "lucide-react";
 import { PostCard } from "@/components/PostCard";
 import { getAllPosts, getCategories } from "@/lib/posts.functions";
 import type { Post, Category } from "@/lib/posts-types";
@@ -63,13 +63,25 @@ function BlogPage() {
 
   const tabs = ["All", ...categories.map((c) => c.name)];
   const shown = filtered.slice(0, visible);
+  const avgRead = posts.length
+    ? Math.round(posts.reduce((s, p) => s + p.readingMinutes, 0) / posts.length)
+    : 0;
+  const SUGGESTIONS = [
+    "ChatGPT prompts", "SWOT analysis", "Pomodoro", "time management",
+    "Excel tips", "presentation skills", "exam preparation", "AI tools free",
+  ];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <header className="mb-8">
-        <p className="text-sm text-primary font-medium">Articles</p>
-        <h1 className="mt-1 text-3xl md:text-4xl font-extrabold tracking-tight">All Articles</h1>
-        <p className="mt-2 text-muted-foreground">Everything we've written for students who actually want results.</p>
+      <header className="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+        <div>
+          <p className="text-sm text-primary font-medium">Articles</p>
+          <h1 className="mt-1 text-3xl md:text-4xl font-extrabold tracking-tight">All Articles</h1>
+          <p className="mt-2 text-muted-foreground">Everything we've written for students who actually want results.</p>
+        </div>
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted text-xs font-medium text-muted-foreground self-start md:self-end">
+          <Clock className="h-3.5 w-3.5" /> {posts.length} articles · avg {avgRead} min read
+        </div>
       </header>
 
       <div className="flex flex-col lg:flex-row lg:items-center gap-4 mb-6">
@@ -81,6 +93,23 @@ function BlogPage() {
           {SORT.map((s) => <option key={s}>{s}</option>)}
         </select>
       </div>
+
+      {!q && (
+        <div className="mb-6">
+          <p className="text-xs text-muted-foreground mb-2">Popular searches</p>
+          <div className="flex flex-wrap gap-2">
+            {SUGGESTIONS.map((s) => (
+              <button
+                key={s}
+                onClick={() => setQ(s)}
+                className="px-3 py-1 rounded-full text-xs bg-muted hover:bg-primary hover:text-primary-foreground transition-colors"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 mb-8">
         {tabs.map((t) => (

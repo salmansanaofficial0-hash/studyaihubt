@@ -177,6 +177,7 @@ export type Database = {
           content: string | null
           cover_emoji: string | null
           created_at: string
+          difficulty: string
           excerpt: string | null
           featured: boolean
           id: string
@@ -198,6 +199,7 @@ export type Database = {
           content?: string | null
           cover_emoji?: string | null
           created_at?: string
+          difficulty?: string
           excerpt?: string | null
           featured?: boolean
           id?: string
@@ -219,6 +221,7 @@ export type Database = {
           content?: string | null
           cover_emoji?: string | null
           created_at?: string
+          difficulty?: string
           excerpt?: string | null
           featured?: boolean
           id?: string
