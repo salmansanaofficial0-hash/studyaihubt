@@ -40,6 +40,9 @@ function AIToolsPage() {
           <p className="mt-4 max-w-2xl text-white/90">
             Hand-picked, student-tested. Filter by pricing or category to find what you need.
           </p>
+          <p className="mt-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-medium backdrop-blur">
+            ✨ Last updated June 2025
+          </p>
         </div>
       </section>
 
