@@ -33,7 +33,7 @@ export function StickyNewsletterBar() {
     if (res.ok) {
       setSubmitted(true);
       localStorage.setItem("newsletter_subscribed", "true");
-      setTimeout(() => setVisible(false), 3000);
+      window.location.href = "/newsletter-confirmed";
     }
   }
 

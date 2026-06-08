@@ -247,7 +247,10 @@ function NewsletterCTA() {
                   setLoading(true);
                   const res = await subscribeToNewsletter(email, "home_cta");
                   setLoading(false);
-                  if (res.ok) { setOk(true); setEmail(""); }
+                  if (res.ok) {
+                    setOk(true); setEmail("");
+                    if (typeof window !== "undefined") window.location.href = "/newsletter-confirmed";
+                  }
                   else setErr(res.error || "Something went wrong.");
                 }}
                 className="mt-6 flex flex-col sm:flex-row gap-2 max-w-lg"
