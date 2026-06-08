@@ -3,6 +3,8 @@ import { Link } from "@tanstack/react-router";
 import type { Post } from "@/lib/posts-types";
 import { Clock, Eye, Flame, Sparkles, Zap } from "lucide-react";
 import { BookmarkButton } from "@/components/BookmarkButton";
+import { DifficultyBadge } from "@/components/DifficultyBadge";
+
 
 function isNewPost(iso: string) {
   const ts = new Date(iso).getTime();
@@ -64,12 +66,15 @@ function PostCardImpl({ post, size = "md" }: { post: Post; size?: "sm" | "md" | 
           <span aria-hidden>{post.emoji}</span>
         </div>
         <div className="p-5">
-          <span
-            className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium"
-            style={{ backgroundColor: `${post.categoryColor}22`, color: post.categoryColor }}
-          >
-            {post.category}
-          </span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span
+              className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium"
+              style={{ backgroundColor: `${post.categoryColor}22`, color: post.categoryColor }}
+            >
+              {post.category}
+            </span>
+            <DifficultyBadge level={post.difficulty} />
+          </div>
           <h3 className={`mt-3 font-bold leading-snug group-hover:text-primary transition-colors ${size === "lg" ? "text-xl" : "text-base"}`}>
             {post.title}
           </h3>
