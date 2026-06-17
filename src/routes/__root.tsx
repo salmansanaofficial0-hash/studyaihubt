@@ -130,6 +130,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        <script id="usercentrics-cmp" src="https://app.usercentrics.eu/browser-ui/latest/loader.js" data-settings-id="Wy5uV3RmEYRB3y" async></script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-25L1S1BCX4"></script>
         <script
           dangerouslySetInnerHTML={{
