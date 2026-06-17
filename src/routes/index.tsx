@@ -1,11 +1,14 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight, Sparkles, Star, Users, BookOpen, Clock, Eye } from "lucide-react";
+import { ArrowRight, Search, Sparkles, Star, Users, BookOpen, Clock, Eye } from "lucide-react";
 import { TOOLS } from "@/data/tools";
 import { PostCard, formatViews } from "@/components/PostCard";
 import { subscribeToNewsletter } from "@/lib/newsletter";
 import { getAllPosts, getCategories } from "@/lib/posts.functions";
 import type { Post, Category } from "@/lib/posts-types";
+import { ToolOfTheWeek } from "@/components/ToolOfTheWeek";
+import { AnimatedStat } from "@/components/AnimatedStat";
+import { ExamSeasonBanner } from "@/components/ExamSeasonBanner";
 
 export const Route = createFileRoute("/")({
   loader: async (): Promise<{ posts: Post[]; categories: Category[] }> => {
@@ -15,13 +18,13 @@ export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
-      { title: "StudyAI Hub — Study Smarter With AI, Not Harder" },
-      { name: "description", content: "Discover the best AI tools, study strategies, and productivity hacks built for university students." },
-      { property: "og:title", content: "StudyAI Hub — Study Smarter With AI" },
-      { property: "og:description", content: "AI tools and study tips built for university students." },
-      { property: "og:url", content: "https://studyaihubt.lovable.app/" },
+      { title: "AI Tools & Study Tips for Pakistani University Students | StudyAI Hub" },
+      { name: "description", content: "StudyAI Hub helps Pakistani university students study smarter with honest AI tool reviews, productivity workflows, and exam strategies. Built for students in Karachi, Lahore, Islamabad and beyond." },
+      { property: "og:title", content: "AI Tools & Study Tips for Pakistani University Students" },
+      { property: "og:description", content: "Honest reviews of ChatGPT, Claude, Gemini and Perplexity — plus study workflows that actually work for Pakistani students." },
+      { property: "og:url", content: "https://studyaihub.tech/" },
     ],
-    links: [{ rel: "canonical", href: "https://studyaihubt.lovable.app/" }],
+    links: [{ rel: "canonical", href: "https://studyaihub.tech/" }],
   }),
   errorComponent: ({ error }) => (
     <div className="max-w-xl mx-auto px-4 py-24 text-center">
@@ -37,10 +40,11 @@ function HomePage() {
     <>
       <Hero categories={categories} />
       <Stats />
+      <ExamSeasonBanner />
       <FeaturedCategories categories={categories} posts={posts} />
       <FeaturedPosts posts={posts} />
       <PopularPosts posts={posts} />
-      <ToolsSpotlight />
+      <ToolOfTheWeek />
       <NewsletterCTA />
       <Testimonials />
     </>
@@ -60,7 +64,7 @@ function Hero({ categories }: { categories: Category[] }) {
           Study Smarter With AI — <span className="text-white/90 italic">Not Harder.</span>
         </h1>
         <p className="mt-5 text-lg md:text-xl text-white/85 max-w-2xl">
-          Discover the best AI tools, study strategies, and productivity hacks built for university students.
+          The honest guide to AI tools, study strategies, and productivity hacks for university students. Written by a real BBA student in Karachi.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link to="/ai-tools" className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-white text-primary font-semibold hover:scale-[1.02] transition-transform">
@@ -70,6 +74,7 @@ function Hero({ categories }: { categories: Category[] }) {
             Read Latest Posts
           </Link>
         </div>
+        <HeroSearch />
         <div className="mt-10 flex flex-wrap gap-2">
           {categories.slice(0, 4).map((c) => (
             <a key={c.slug} href="#categories" className="px-3 py-1.5 rounded-full text-sm bg-white/15 hover:bg-white/25 backdrop-blur transition-colors">
@@ -82,25 +87,46 @@ function Hero({ categories }: { categories: Category[] }) {
   );
 }
 
+function HeroSearch() {
+  const navigate = useNavigate();
+  const [q, setQ] = useState("");
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        const v = q.trim();
+        if (v) navigate({ to: "/blog", search: { search: v } as never });
+      }}
+      className="mt-8 flex items-center gap-2 max-w-xl bg-white/15 backdrop-blur border border-white/25 rounded-full pl-4 pr-1.5 py-1.5"
+      role="search"
+    >
+      <Search className="h-4 w-4 text-white/80" />
+      <input
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+        placeholder="Search articles, tools, study tips..."
+        aria-label="Search articles"
+        className="flex-1 bg-transparent outline-none text-white placeholder:text-white/70 text-sm py-2"
+      />
+      <button type="submit" className="px-4 py-2 rounded-full bg-white text-primary text-sm font-semibold hover:scale-[1.02] transition-transform">
+        Search
+      </button>
+    </form>
+  );
+}
+
+
 function Stats() {
   const items = [
-    { I: Sparkles, label: "AI Tools Reviewed", value: "50+" },
-    { I: Users, label: "Students Helped", value: "10,000+" },
-    { I: BookOpen, label: "Study Guides", value: "100+" },
+    { I: Sparkles, label: "AI Tools Reviewed", value: 50 },
+    { I: Users, label: "Students Helped", value: 10000 },
+    { I: BookOpen, label: "Study Guides", value: 100 },
   ];
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-10">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {items.map((it) => (
-          <div key={it.label} className="glass rounded-2xl p-5 flex items-center gap-4">
-            <span className="h-12 w-12 rounded-xl bg-gradient-brand text-white inline-flex items-center justify-center">
-              <it.I className="h-5 w-5" />
-            </span>
-            <div>
-              <p className="text-2xl font-bold">{it.value}</p>
-              <p className="text-xs text-muted-foreground">{it.label}</p>
-            </div>
-          </div>
+          <AnimatedStat key={it.label} target={it.value} label={it.label} Icon={it.I} />
         ))}
       </div>
     </section>
@@ -221,7 +247,10 @@ function NewsletterCTA() {
                   setLoading(true);
                   const res = await subscribeToNewsletter(email, "home_cta");
                   setLoading(false);
-                  if (res.ok) { setOk(true); setEmail(""); }
+                  if (res.ok) {
+                    setOk(true); setEmail("");
+                    if (typeof window !== "undefined") window.location.href = "/newsletter-confirmed";
+                  }
                   else setErr(res.error || "Something went wrong.");
                 }}
                 className="mt-6 flex flex-col sm:flex-row gap-2 max-w-lg"

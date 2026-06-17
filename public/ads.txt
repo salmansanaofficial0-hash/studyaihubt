@@ -1,0 +1,4 @@
+# StudyAI Hub ads.txt
+# No authorized digital sellers at this time.
+# Add lines in the format: domain, publisher_id, relationship, cert_id
+placeholder.example.com, placeholder, DIRECT

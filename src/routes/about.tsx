@@ -13,15 +13,15 @@ export const Route = createFileRoute("/about")({
       { name: "description", content: "Why StudyAI Hub exists, who's behind it, and where to start reading." },
       { property: "og:title", content: "About — StudyAI Hub" },
       { property: "og:description", content: "A blog built by students, for students, about studying smarter with AI." },
-      { property: "og:url", content: "https://studyaihubt.lovable.app/about" },
+      { property: "og:url", content: "https://studyaihub.tech/about" },
     ],
-    links: [{ rel: "canonical", href: "https://studyaihubt.lovable.app/about" }],
+    links: [{ rel: "canonical", href: "https://studyaihub.tech/about" }],
   }),
 });
 
 function AboutPage() {
   const { posts } = Route.useLoaderData() as { posts: Post[] };
-  const startHere = posts.filter((p) => p.featured).slice(0, 4);
+  const startHere = posts.filter((p) => p.featured).slice(0, 5);
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <p className="text-sm text-primary font-medium">About</p>
@@ -62,6 +62,11 @@ function AboutPage() {
           productivity" blog I read either had no idea what student life is actually like, or was 90% sponsored content for
           tools nobody uses.
         </p>
+        <p>
+          StudyAI Hub now has <strong>25+ in-depth articles</strong> across <strong>6 categories</strong> — AI tools, study tips, productivity,
+          business &amp; finance, presentation skills, and tech reviews. Every post is tested in real assignments, not just
+          theory.
+        </p>
         <h2>Our mission</h2>
         <p>
           Help university students study smarter without burning out. We test AI tools in real assignments, write study
@@ -83,8 +88,8 @@ function AboutPage() {
         </p>
       </div>
 
-      <h2 className="mt-14 text-2xl font-extrabold">Start here</h2>
-      <p className="text-muted-foreground mt-2">If you're new, these four articles will give you the biggest wins fastest.</p>
+      <h2 className="mt-14 text-2xl font-extrabold">Start here — top 5 reads</h2>
+      <p className="text-muted-foreground mt-2">If you're new, these five articles will give you the biggest wins fastest.</p>
       <div className="mt-6 space-y-3">
         {startHere.map((p, i) => (
           <Link

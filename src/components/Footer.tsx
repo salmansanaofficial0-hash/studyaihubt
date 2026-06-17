@@ -81,15 +81,17 @@ export function Footer() {
           <FooterCol title="Connect">
             <div className="flex gap-2">
               {[
-                { I: Twitter, l: "Twitter" },
-                { I: Instagram, l: "Instagram" },
-                { I: Youtube, l: "YouTube" },
-                { I: Linkedin, l: "LinkedIn" },
-              ].map(({ I, l }) => (
+                { I: Twitter, l: "Twitter", href: "https://twitter.com/studyaihub" },
+                { I: Instagram, l: "Instagram", href: "https://instagram.com/studyaihub" },
+                { I: Youtube, l: "YouTube", href: "https://youtube.com/@studyaihub" },
+                { I: Linkedin, l: "LinkedIn", href: "https://linkedin.com/company/studyaihub" },
+              ].map(({ I, l, href }) => (
                 <a
                   key={l}
-                  href="#"
-                  aria-label={l}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Follow on ${l}`}
                   className="h-9 w-9 rounded-md bg-muted hover:bg-primary hover:text-primary-foreground inline-flex items-center justify-center transition-colors"
                 >
                   <I className="h-4 w-4" />
@@ -99,9 +101,13 @@ export function Footer() {
           </FooterCol>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-border text-xs text-muted-foreground flex flex-wrap gap-2 justify-between">
-          <p>© 2025 StudyAI Hub. Made for students, by students.</p>
-          <p>Built with ☕ in Karachi.</p>
+        <div className="mt-12 pt-6 border-t border-border text-xs text-muted-foreground flex flex-wrap gap-x-4 gap-y-2 justify-between items-center">
+          <p>© 2026 StudyAI Hub. Made for students, by students.</p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <Link to="/privacy-policy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
+            <Link to="/disclaimer" className="hover:text-foreground transition-colors">Disclaimer</Link>
+            <span>Built with ☕ in Karachi.</span>
+          </div>
         </div>
       </div>
     </footer>

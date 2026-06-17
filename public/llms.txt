@@ -1,0 +1,15 @@
+# StudyAI Hub
+
+> The honest guide to AI tools, study strategies, and productivity hacks for university students.
+
+StudyAI Hub publishes practical, student-tested reviews of AI tools (ChatGPT, Claude, Gemini, Perplexity, NotebookLM, and more) alongside study workflows, productivity systems, and exam-prep strategies. Content is written for university students who want to use AI ethically and effectively.
+
+## Pages
+- [Home](https://studyaihub.tech/): Featured posts, categories, and tool spotlights
+- [Blog](https://studyaihub.tech/blog): All articles, filterable by category
+- [AI Tools](https://studyaihub.tech/ai-tools): Curated directory of AI tools for students
+- [About](https://studyaihub.tech/about): Mission, editorial standards, and the team
+- [Contact](https://studyaihub.tech/contact): Get in touch
+
+## Optional
+- [Sitemap](https://studyaihub.tech/sitemap.xml): Full URL index

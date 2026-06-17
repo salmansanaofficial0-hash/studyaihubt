@@ -5,7 +5,7 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const BASE_URL = "https://studyaihubt.lovable.app";
+        const BASE_URL = "https://studyaihub.tech";
         const supabase = createClient(
           process.env.SUPABASE_URL ?? "",
           process.env.SUPABASE_PUBLISHABLE_KEY ?? "",

@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Clock } from "lucide-react";
 import { PostCard } from "@/components/PostCard";
 import { getAllPosts, getCategories } from "@/lib/posts.functions";
 import type { Post, Category } from "@/lib/posts-types";
 
-export const Route = createFileRoute("/blog")({
+export const Route = createFileRoute("/blog/")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    search: typeof search.search === "string" ? search.search : "",
+  }),
   loader: async (): Promise<{ posts: Post[]; categories: Category[] }> => {
     const [posts, categories] = await Promise.all([getAllPosts(), getCategories()]);
     return { posts, categories };
@@ -17,9 +20,9 @@ export const Route = createFileRoute("/blog")({
       { name: "description", content: "Browse every article on StudyAI Hub: AI tools, study tips, productivity, business, and tech." },
       { property: "og:title", content: "All Articles — StudyAI Hub" },
       { property: "og:description", content: "Articles on AI tools, study tips and productivity for students." },
-      { property: "og:url", content: "https://studyaihubt.lovable.app/blog" },
+      { property: "og:url", content: "https://studyaihub.tech/blog" },
     ],
-    links: [{ rel: "canonical", href: "https://studyaihubt.lovable.app/blog" }],
+    links: [{ rel: "canonical", href: "https://studyaihub.tech/blog" }],
   }),
   errorComponent: ({ error }) => (
     <div className="max-w-xl mx-auto px-4 py-24 text-center">
@@ -34,8 +37,9 @@ type Sort = (typeof SORT)[number];
 
 function BlogPage() {
   const { posts, categories } = Route.useLoaderData() as { posts: Post[]; categories: Category[] };
+  const { search: searchParam } = Route.useSearch();
   const [tab, setTab] = useState<string>("All");
-  const [q, setQ] = useState("");
+  const [q, setQ] = useState(searchParam || "");
   const [sort, setSort] = useState<Sort>("Latest");
   const [visible, setVisible] = useState(6);
 
@@ -59,13 +63,25 @@ function BlogPage() {
 
   const tabs = ["All", ...categories.map((c) => c.name)];
   const shown = filtered.slice(0, visible);
+  const avgRead = posts.length
+    ? Math.round(posts.reduce((s, p) => s + p.readingMinutes, 0) / posts.length)
+    : 0;
+  const SUGGESTIONS = [
+    "ChatGPT prompts", "SWOT analysis", "Pomodoro", "time management",
+    "Excel tips", "presentation skills", "exam preparation", "AI tools free",
+  ];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <header className="mb-8">
-        <p className="text-sm text-primary font-medium">Articles</p>
-        <h1 className="mt-1 text-3xl md:text-4xl font-extrabold tracking-tight">All Articles</h1>
-        <p className="mt-2 text-muted-foreground">Everything we've written for students who actually want results.</p>
+      <header className="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+        <div>
+          <p className="text-sm text-primary font-medium">Articles</p>
+          <h1 className="mt-1 text-3xl md:text-4xl font-extrabold tracking-tight">All Articles</h1>
+          <p className="mt-2 text-muted-foreground">Everything we've written for students who actually want results.</p>
+        </div>
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted text-xs font-medium text-muted-foreground self-start md:self-end">
+          <Clock className="h-3.5 w-3.5" /> {posts.length} articles · avg {avgRead} min read
+        </div>
       </header>
 
       <div className="flex flex-col lg:flex-row lg:items-center gap-4 mb-6">
@@ -77,6 +93,23 @@ function BlogPage() {
           {SORT.map((s) => <option key={s}>{s}</option>)}
         </select>
       </div>
+
+      {!q && (
+        <div className="mb-6">
+          <p className="text-xs text-muted-foreground mb-2">Popular searches</p>
+          <div className="flex flex-wrap gap-2">
+            {SUGGESTIONS.map((s) => (
+              <button
+                key={s}
+                onClick={() => setQ(s)}
+                className="px-3 py-1 rounded-full text-xs bg-muted hover:bg-primary hover:text-primary-foreground transition-colors"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 mb-8">
         {tabs.map((t) => (
@@ -96,7 +129,24 @@ function BlogPage() {
         {shown.map((p) => <PostCard key={p.id} post={p} />)}
       </div>
 
-      {filtered.length === 0 && <p className="text-center text-muted-foreground py-16">No articles match your search.</p>}
+      {filtered.length === 0 && (
+        <div className="text-center py-20 max-w-md mx-auto">
+          <div className="text-7xl mb-4" aria-hidden>🔍</div>
+          <h2 className="text-xl font-bold">No posts found</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            We couldn't find articles matching <span className="font-medium text-foreground">"{q}"</span>.
+            Try a broader keyword like <button onClick={() => setQ("AI")} className="text-primary underline">"AI"</button>,
+            <button onClick={() => setQ("study")} className="text-primary underline ml-1">"study"</button>, or
+            <button onClick={() => setQ("productivity")} className="text-primary underline ml-1">"productivity"</button>.
+          </p>
+          <button
+            onClick={() => { setQ(""); setTab("All"); }}
+            className="mt-6 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium"
+          >
+            Clear filters
+          </button>
+        </div>
+      )}
 
       {visible < filtered.length && (
         <div className="mt-10 text-center">

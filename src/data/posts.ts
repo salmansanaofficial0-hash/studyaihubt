@@ -7,12 +7,12 @@ export type Category = {
 };
 
 export const CATEGORIES: Category[] = [
-  { name: "AI Tools", slug: "ai-tools", color: "#6366F1", emoji: "🤖", description: "The best AI tools to supercharge your studies." },
-  { name: "Study Tips", slug: "study-tips", color: "#06B6D4", emoji: "📚", description: "Proven study strategies that actually work." },
-  { name: "Productivity", slug: "productivity", color: "#10B981", emoji: "🎯", description: "Get more done with less burnout." },
-  { name: "Business & Finance", slug: "business-finance", color: "#F59E0B", emoji: "💼", description: "BBA & finance concepts made simple." },
-  { name: "Presentations", slug: "presentations", color: "#EC4899", emoji: "🎤", description: "Build presentations that wow your class." },
-  { name: "Tech Reviews", slug: "tech-reviews", color: "#8B5CF6", emoji: "💻", description: "Honest reviews of student tech." },
+  { name: "AI Tools", slug: "ai-tools", color: "#6366F1", emoji: "🤖", description: "In-depth reviews and how-to guides for the best AI tools that help university students learn faster, write better, and research smarter." },
+  { name: "Study Tips", slug: "study-tips", color: "#06B6D4", emoji: "📚", description: "Proven study strategies, memory techniques, note-taking systems, and exam-prep workflows that actually work for busy university students." },
+  { name: "Productivity", slug: "productivity", color: "#10B981", emoji: "🎯", description: "Time management, focus systems, and productivity hacks for students — get more done in less time without burning out." },
+  { name: "Business & Finance", slug: "business-finance", color: "#F59E0B", emoji: "💼", description: "BBA, accounting, economics, and personal finance concepts explained simply for university students and self-learners." },
+  { name: "Presentations", slug: "presentations", color: "#EC4899", emoji: "🎤", description: "Design, scripting, and delivery guides to help students build presentations and pitches that genuinely wow the room." },
+  { name: "Tech Reviews", slug: "tech-reviews", color: "#8B5CF6", emoji: "💻", description: "Honest, student-focused reviews of laptops, tablets, accessories, and software — what's worth your tuition-budget money." },
 ];
 
 export function categoryBySlug(slug: string) {

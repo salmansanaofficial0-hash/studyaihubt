@@ -13,6 +13,9 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
+import { FloatingChat } from "@/components/FloatingChat";
+import { NewsletterPopup } from "@/components/NewsletterPopup";
+import { StickyNewsletterBar } from "@/components/StickyNewsletterBar";
 
 function NotFoundComponent() {
   return (
@@ -70,6 +73,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "manifest", href: "/manifest.json" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" },
@@ -79,16 +83,38 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "WebSite",
-          name: "StudyAI Hub",
-          url: "https://studyaihubt.lovable.app",
-          description: "AI tools and study tips for university students.",
-          inLanguage: "en",
-          potentialAction: {
-            "@type": "SearchAction",
-            target: "https://studyaihubt.lovable.app/blog?q={search_term_string}",
-            "query-input": "required name=search_term_string",
-          },
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://studyaihub.tech/#organization",
+              name: "StudyAI Hub",
+              url: "https://studyaihub.tech",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://studyaihub.tech/favicon.ico",
+              },
+              description: "AI tools and study tips for university students.",
+              sameAs: [
+                "https://twitter.com/StudyAIHub",
+                "https://www.linkedin.com/company/studyaihub",
+                "https://www.youtube.com/@StudyAIHub",
+              ],
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://studyaihub.tech/#website",
+              name: "StudyAI Hub",
+              url: "https://studyaihub.tech",
+              description: "AI tools and study tips for university students.",
+              inLanguage: "en",
+              publisher: { "@id": "https://studyaihub.tech/#organization" },
+              potentialAction: {
+                "@type": "SearchAction",
+                target: "https://studyaihub.tech/blog?q={search_term_string}",
+                "query-input": "required name=search_term_string",
+              },
+            },
+          ],
         }),
       },
     ],
@@ -139,6 +165,9 @@ function RootComponent() {
         <Footer />
         <BackToTop />
         <MobileBottomNav />
+        <FloatingChat />
+        <NewsletterPopup />
+        <StickyNewsletterBar />
       </div>
     </QueryClientProvider>
   );

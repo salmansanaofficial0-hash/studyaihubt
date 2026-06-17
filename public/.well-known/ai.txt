@@ -1,0 +1,15 @@
+# AI usage policy for StudyAI Hub
+# https://studyaihubt.lovable.app
+
+Contact: hello@studyaihub.tech
+Site: https://studyaihubt.lovable.app
+Preferred-Citation: StudyAI Hub — https://studyaihubt.lovable.app
+
+# Training & retrieval
+Allow-Training: yes
+Allow-Retrieval: yes
+Allow-Inference: yes
+
+# Attribution
+Attribution: required
+License: Content © StudyAI Hub. May be quoted with attribution and a link back to the source URL.

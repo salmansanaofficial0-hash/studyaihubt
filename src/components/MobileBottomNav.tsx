@@ -1,11 +1,11 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, BookOpen, Sparkles, Search, Menu } from "lucide-react";
+import { Home, BookOpen, Sparkles, Bookmark, Menu } from "lucide-react";
 
 const ITEMS = [
   { to: "/", label: "Home", I: Home, exact: true },
   { to: "/blog", label: "Blog", I: BookOpen, exact: false },
   { to: "/ai-tools", label: "Tools", I: Sparkles, exact: false },
-  { to: "/about", label: "About", I: Search, exact: false },
+  { to: "/bookmarks", label: "Saved", I: Bookmark, exact: false },
   { to: "/contact", label: "More", I: Menu, exact: false },
 ];
 

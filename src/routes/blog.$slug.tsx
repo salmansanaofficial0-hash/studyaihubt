@@ -1,12 +1,15 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Calendar, Clock, Eye, ChevronRight, Twitter, Facebook, Linkedin, Link as LinkIcon, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Calendar, Clock, Eye, ChevronRight, Twitter, Facebook, Linkedin, Link as LinkIcon, ThumbsUp, ThumbsDown, MessageCircle, ArrowLeft } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { ArticleBody, TableOfContents, extractHeadings } from "@/components/Article";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { PostCard } from "@/components/PostCard";
 import { Toast, useToast } from "@/components/Toast";
 import { AIAssistant } from "@/components/AIAssistant";
+import { BookmarkButton } from "@/components/BookmarkButton";
+import { KeyTakeaways } from "@/components/KeyTakeaways";
+import { DifficultyBadge } from "@/components/DifficultyBadge";
 import { subscribeToNewsletter } from "@/lib/newsletter";
 import {
   getPostBySlug,
@@ -31,32 +34,60 @@ export const Route = createFileRoute("/blog/$slug")({
   head: ({ loaderData }) => {
     const p = loaderData?.post;
     if (!p) return {};
+    const ogImage = "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8f61bf2a-369c-48e5-aba4-d3c305533035/id-preview-4718dce1--844a243d-3c7e-4168-b4d1-c35480effa4a.lovable.app-1779430450090.png";
+    const shortTitle = p.title.length > 50 ? p.title : `${p.title} | StudyAI Hub`;
     return {
       meta: [
-        { title: `${p.title} | StudyAI Hub` },
+        { title: shortTitle },
         { name: "description", content: p.excerpt },
         { property: "og:title", content: p.title },
         { property: "og:description", content: p.excerpt },
         { property: "og:type", content: "article" },
-        { property: "og:url", content: `https://studyaihubt.lovable.app/blog/${p.slug}` },
+        { property: "og:url", content: `https://studyaihub.tech/blog/${p.slug}` },
+        { property: "og:image", content: ogImage },
         { property: "article:author", content: p.author },
         { property: "article:published_time", content: p.date },
         { property: "article:section", content: p.category },
         { name: "twitter:title", content: p.title },
         { name: "twitter:description", content: p.excerpt },
+        { name: "twitter:image", content: ogImage },
       ],
-      links: [{ rel: "canonical", href: `https://studyaihubt.lovable.app/blog/${p.slug}` }],
+      links: [{ rel: "canonical", href: `https://studyaihub.tech/blog/${p.slug}` }],
       scripts: [
         {
           type: "application/ld+json",
           children: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Article",
-            headline: p.title,
-            description: p.excerpt,
-            datePublished: p.date,
-            author: { "@type": "Person", name: p.author },
-            keywords: p.tags.join(", "),
+            "@graph": [
+              {
+                "@type": "BlogPosting",
+                "@id": `https://studyaihub.tech/blog/${p.slug}#article`,
+                headline: p.title,
+                description: p.excerpt,
+                image: [ogImage],
+                datePublished: p.date,
+                dateModified: p.date,
+                inLanguage: "en",
+                mainEntityOfPage: `https://studyaihub.tech/blog/${p.slug}`,
+                articleSection: p.category,
+                keywords: p.tags.join(", "),
+                author: {
+                  "@type": "Person",
+                  name: p.author,
+                  description: p.authorBio,
+                },
+                publisher: { "@id": "https://studyaihub.tech/#organization" },
+              },
+              {
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  { "@type": "ListItem", position: 1, name: "Home", item: "https://studyaihub.tech/" },
+                  { "@type": "ListItem", position: 2, name: "Blog", item: "https://studyaihub.tech/blog" },
+                  { "@type": "ListItem", position: 3, name: p.category, item: `https://studyaihub.tech/category/${p.categorySlug}` },
+                  { "@type": "ListItem", position: 4, name: p.title, item: `https://studyaihub.tech/blog/${p.slug}` },
+                ],
+              },
+            ],
           }),
         },
       ],
@@ -95,6 +126,10 @@ function BlogPost() {
   const { msg, show } = useToast();
   const related = allPosts.filter((p) => p.categorySlug === post.categorySlug && p.id !== post.id).slice(0, 3);
   const sidebarPopular = allPosts.filter((p) => p.categorySlug === post.categorySlug && p.id !== post.id).slice(0, 4);
+  const alsoRead = allPosts
+    .filter((p) => p.id !== post.id && p.categorySlug !== post.categorySlug)
+    .sort((a, b) => b.views - a.views)
+    .slice(0, 4);
   const url = typeof window !== "undefined" ? window.location.href : `/blog/${post.slug}`;
 
   const incView = useServerFn(incrementPostView);
@@ -150,8 +185,19 @@ function BlogPost() {
   return (
     <>
       <ReadingProgress />
-      <article className="pt-20 md:pt-24">
+      <article className="pt-20 md:pt-24 relative">
+        <div
+          className="absolute top-0 inset-x-0 h-[420px] -z-10 pointer-events-none"
+          style={{ background: `linear-gradient(180deg, ${post.categoryColor}22 0%, transparent 100%)` }}
+          aria-hidden
+        />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-primary transition-colors mb-4"
+          >
+            <ArrowLeft className="h-4 w-4" /> Back to Blog
+          </Link>
           <nav className="text-xs text-muted-foreground flex items-center gap-1 flex-wrap" aria-label="Breadcrumb">
             <Link to="/" className="hover:text-foreground">Home</Link>
             <ChevronRight className="h-3 w-3" />
@@ -163,9 +209,12 @@ function BlogPost() {
           </nav>
 
           <header className="mt-6 max-w-4xl">
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: `${post.categoryColor}22`, color: post.categoryColor }}>
-              {post.category}
-            </span>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: `${post.categoryColor}22`, color: post.categoryColor }}>
+                {post.category}
+              </span>
+              <DifficultyBadge level={post.difficulty} size="md" />
+            </div>
             <h1 className="mt-4 text-3xl md:text-5xl font-extrabold tracking-tight leading-[1.1]">{post.title}</h1>
             <p className="mt-4 text-lg text-muted-foreground">{post.excerpt}</p>
 
@@ -179,15 +228,28 @@ function BlogPost() {
               <span className="text-muted-foreground inline-flex items-center gap-1"><Calendar className="h-3.5 w-3.5" />{formatDate(post.date)}</span>
               <span className="text-muted-foreground inline-flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{post.readingTime}</span>
               <span className="text-muted-foreground inline-flex items-center gap-1"><Eye className="h-3.5 w-3.5" />{post.views.toLocaleString()} views</span>
+              <UpdatedBadge updatedAt={post.updatedAt} createdAt={post.date} />
             </div>
 
             <div className="mt-6 flex gap-2">
               <ShareBtn href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(url)}`} I={Twitter} label="Twitter" />
               <ShareBtn href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} I={Facebook} label="Facebook" />
               <ShareBtn href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} I={Linkedin} label="LinkedIn" />
+              <ShareBtn href={`https://wa.me/?text=${encodeURIComponent(post.title + " " + url)}`} I={MessageCircle} label="WhatsApp" />
               <button onClick={copy} className="h-9 w-9 rounded-md bg-muted hover:bg-primary hover:text-primary-foreground inline-flex items-center justify-center transition-colors" aria-label="Copy link">
                 <LinkIcon className="h-4 w-4" />
               </button>
+              <BookmarkButton
+                post={{
+                  slug: post.slug,
+                  title: post.title,
+                  excerpt: post.excerpt,
+                  emoji: post.emoji,
+                  category: post.category,
+                  categorySlug: post.categorySlug,
+                  categoryColor: post.categoryColor,
+                }}
+              />
             </div>
           </header>
 
@@ -197,6 +259,7 @@ function BlogPost() {
                 {post.emoji}
               </div>
 
+              <KeyTakeaways content={post.content} />
               <ArticleBody content={post.content} />
 
               <div className="mt-12 flex flex-wrap gap-2">
@@ -313,6 +376,19 @@ function BlogPost() {
               </div>
             </section>
           )}
+
+          {alsoRead.length > 0 && (
+            <section className="mt-16">
+              <h2 className="text-2xl font-extrabold tracking-tight mb-6">Students Also Read</h2>
+              <div className="flex gap-5 overflow-x-auto no-scrollbar -mx-4 px-4 pb-3 snap-x snap-mandatory">
+                {alsoRead.map((p) => (
+                  <div key={p.id} className="snap-start shrink-0 w-[280px] sm:w-[300px]">
+                    <PostCard post={p} />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </article>
       {msg && <Toast message={msg} />}
@@ -330,4 +406,18 @@ function ShareBtn({ href, I, label }: { href: string; I: typeof Twitter; label: 
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+}
+
+function UpdatedBadge({ updatedAt, createdAt }: { updatedAt: string; createdAt: string }) {
+  const iso = updatedAt || createdAt;
+  const daysSince = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+  const isRecent = daysSince <= 14;
+  const cls = isRecent
+    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+    : "border-border bg-muted text-muted-foreground";
+  return (
+    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs border ${cls}`}>
+      🔄 Updated {formatDate(iso)}
+    </span>
+  );
 }

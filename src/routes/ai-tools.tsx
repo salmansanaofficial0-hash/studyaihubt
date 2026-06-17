@@ -11,9 +11,9 @@ export const Route = createFileRoute("/ai-tools")({
       { name: "description", content: "Curated directory of the best AI tools for university students: writing, research, presentations and productivity." },
       { property: "og:title", content: "Best AI Tools for Students in 2025" },
       { property: "og:description", content: "Free and paid AI tools, reviewed for university students." },
-      { property: "og:url", content: "https://studyaihubt.lovable.app/ai-tools" },
+      { property: "og:url", content: "https://studyaihub.tech/ai-tools" },
     ],
-    links: [{ rel: "canonical", href: "https://studyaihubt.lovable.app/ai-tools" }],
+    links: [{ rel: "canonical", href: "https://studyaihub.tech/ai-tools" }],
   }),
 });
 
@@ -25,7 +25,7 @@ function AIToolsPage() {
   const tools = useMemo(() => {
     if (f === "All") return TOOLS;
     if (f === "Free") return TOOLS.filter((t) => t.pricing === "Free" || t.pricing === "Freemium");
-    if (f === "Paid") return TOOLS.filter((t) => t.pricing === "Paid" || t.pricing === "Freemium");
+    if (f === "Paid") return TOOLS.filter((t) => t.pricing === "Paid");
     return TOOLS.filter((t) => t.category === f);
   }, [f]);
 
@@ -39,6 +39,9 @@ function AIToolsPage() {
           </h1>
           <p className="mt-4 max-w-2xl text-white/90">
             Hand-picked, student-tested. Filter by pricing or category to find what you need.
+          </p>
+          <p className="mt-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-medium backdrop-blur">
+            ✨ Last updated June 2025
           </p>
         </div>
       </section>
