@@ -16,9 +16,9 @@ export const Route = createFileRoute("/blog/")({
   component: BlogPage,
   head: () => ({
     meta: [
-      { title: "All Articles — StudyAI Hub" },
+      { title: "All Articles — AI Tools Study Tips Productivity | StudyAI Hub" },
       { name: "description", content: "Browse every article on StudyAI Hub: AI tools, study tips, productivity, business, and tech." },
-      { property: "og:title", content: "All Articles — StudyAI Hub" },
+      { property: "og:title", content: "All Articles — AI Tools Study Tips Productivity | StudyAI Hub" },
       { property: "og:description", content: "Articles on AI tools, study tips and productivity for students." },
       { property: "og:url", content: "https://studyaihub.tech/blog" },
     ],
@@ -80,7 +80,7 @@ function BlogPage() {
           <p className="mt-2 text-muted-foreground">Everything we've written for students who actually want results.</p>
         </div>
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted text-xs font-medium text-muted-foreground self-start md:self-end">
-          <Clock className="h-3.5 w-3.5" /> {posts.length} articles · avg {avgRead} min read
+          <Clock className="h-3.5 w-3.5" /> Showing {posts.length} articles · avg {avgRead} min read
         </div>
       </header>
 

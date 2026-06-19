@@ -18,13 +18,29 @@ export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
-      { title: "AI Tools & Study Tips for Pakistani University Students | StudyAI Hub" },
-      { name: "description", content: "StudyAI Hub helps Pakistani university students study smarter with honest AI tool reviews, productivity workflows, and exam strategies. Built for students in Karachi, Lahore, Islamabad and beyond." },
-      { property: "og:title", content: "AI Tools & Study Tips for Pakistani University Students" },
-      { property: "og:description", content: "Honest reviews of ChatGPT, Claude, Gemini and Perplexity — plus study workflows that actually work for Pakistani students." },
+      { title: "StudyAI Hub — Best AI Tools and Study Tips for Students 2025" },
+      { name: "description", content: "Discover the best free AI tools study strategies and productivity hacks for university students in Pakistan. Honest reviews by a real BBA student. Updated weekly." },
+      { property: "og:title", content: "StudyAI Hub — Best AI Tools and Study Tips for Students 2025" },
+      { property: "og:description", content: "Discover the best free AI tools study strategies and productivity hacks for university students in Pakistan. Honest reviews by a real BBA student. Updated weekly." },
       { property: "og:url", content: "https://studyaihub.tech/" },
     ],
     links: [{ rel: "canonical", href: "https://studyaihub.tech/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "StudyAI Hub",
+          url: "https://studyaihub.tech/",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: "https://studyaihub.tech/blog?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }),
+      },
+    ],
   }),
   errorComponent: ({ error }) => (
     <div className="max-w-xl mx-auto px-4 py-24 text-center">

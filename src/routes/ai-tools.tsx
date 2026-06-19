@@ -7,13 +7,28 @@ export const Route = createFileRoute("/ai-tools")({
   component: AIToolsPage,
   head: () => ({
     meta: [
-      { title: "Best AI Tools for Students in 2025 — StudyAI Hub" },
+      { title: "Best Free AI Tools for Students 2025 | StudyAI Hub" },
       { name: "description", content: "Curated directory of the best AI tools for university students: writing, research, presentations and productivity." },
-      { property: "og:title", content: "Best AI Tools for Students in 2025" },
+      { property: "og:title", content: "Best Free AI Tools for Students 2025 | StudyAI Hub" },
       { property: "og:description", content: "Free and paid AI tools, reviewed for university students." },
       { property: "og:url", content: "https://studyaihub.tech/ai-tools" },
     ],
     links: [{ rel: "canonical", href: "https://studyaihub.tech/ai-tools" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "itemListElement": TOOLS.slice(0, 6).map((t, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "name": t.name,
+            "url": t.url
+          }))
+        }),
+      },
+    ],
   }),
 });
 
@@ -90,6 +105,7 @@ function AIToolsPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-sm font-medium text-primary"
+                  title={`Click to visit ${t.name}`}
                 >
                   Visit Tool <ExternalLink className="h-3.5 w-3.5" />
                 </a>

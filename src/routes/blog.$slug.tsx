@@ -34,22 +34,24 @@ export const Route = createFileRoute("/blog/$slug")({
   head: ({ loaderData }) => {
     const p = loaderData?.post;
     if (!p) return {};
-    const ogImage = "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8f61bf2a-369c-48e5-aba4-d3c305533035/id-preview-4718dce1--844a243d-3c7e-4168-b4d1-c35480effa4a.lovable.app-1779430450090.png";
-    const shortTitle = p.title.length > 50 ? p.title : `${p.title} | StudyAI Hub`;
+    const ogImage = "https://studyaihub.tech/og-image.svg";
+    const shortTitle = `${p.title} | StudyAI Hub`;
+    const excerptDesc = p.excerpt && p.excerpt.length > 155 ? p.excerpt.substring(0, 152) + "..." : p.excerpt;
     return {
       meta: [
         { title: shortTitle },
-        { name: "description", content: p.excerpt },
-        { property: "og:title", content: p.title },
-        { property: "og:description", content: p.excerpt },
+        { name: "description", content: excerptDesc },
+        { property: "og:title", content: shortTitle },
+        { property: "og:description", content: excerptDesc },
         { property: "og:type", content: "article" },
         { property: "og:url", content: `https://studyaihub.tech/blog/${p.slug}` },
         { property: "og:image", content: ogImage },
         { property: "article:author", content: p.author },
         { property: "article:published_time", content: p.date },
         { property: "article:section", content: p.category },
-        { name: "twitter:title", content: p.title },
-        { name: "twitter:description", content: p.excerpt },
+        ...p.tags.map(tag => ({ property: "article:tag", content: tag })),
+        { name: "twitter:title", content: shortTitle },
+        { name: "twitter:description", content: excerptDesc },
         { name: "twitter:image", content: ogImage },
       ],
       links: [{ rel: "canonical", href: `https://studyaihub.tech/blog/${p.slug}` }],
@@ -58,36 +60,21 @@ export const Route = createFileRoute("/blog/$slug")({
           type: "application/ld+json",
           children: JSON.stringify({
             "@context": "https://schema.org",
-            "@graph": [
-              {
-                "@type": "BlogPosting",
-                "@id": `https://studyaihub.tech/blog/${p.slug}#article`,
-                headline: p.title,
-                description: p.excerpt,
-                image: [ogImage],
-                datePublished: p.date,
-                dateModified: p.date,
-                inLanguage: "en",
-                mainEntityOfPage: `https://studyaihub.tech/blog/${p.slug}`,
-                articleSection: p.category,
-                keywords: p.tags.join(", "),
-                author: {
-                  "@type": "Person",
-                  name: p.author,
-                  description: p.authorBio,
-                },
-                publisher: { "@id": "https://studyaihub.tech/#organization" },
-              },
-              {
-                "@type": "BreadcrumbList",
-                itemListElement: [
-                  { "@type": "ListItem", position: 1, name: "Home", item: "https://studyaihub.tech/" },
-                  { "@type": "ListItem", position: 2, name: "Blog", item: "https://studyaihub.tech/blog" },
-                  { "@type": "ListItem", position: 3, name: p.category, item: `https://studyaihub.tech/category/${p.categorySlug}` },
-                  { "@type": "ListItem", position: 4, name: p.title, item: `https://studyaihub.tech/blog/${p.slug}` },
-                ],
-              },
-            ],
+            "@type": "Article",
+            headline: p.title,
+            description: excerptDesc,
+            image: [ogImage],
+            datePublished: p.date,
+            dateModified: p.date,
+            inLanguage: "en",
+            mainEntityOfPage: `https://studyaihub.tech/blog/${p.slug}`,
+            articleSection: p.category,
+            keywords: p.tags.join(", "),
+            author: {
+              "@type": "Person",
+              name: p.author,
+            },
+            publisher: { "@id": "https://studyaihub.tech/#organization" },
           }),
         },
       ],

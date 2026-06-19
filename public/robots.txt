@@ -3,6 +3,8 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /admin
+Disallow: /bookmarks
 
 # AI / LLM crawlers — explicitly allowed
 User-agent: GPTBot

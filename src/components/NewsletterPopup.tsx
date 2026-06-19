@@ -1,146 +1,163 @@
-import { useEffect, useState } from "react";
-import { X, Sparkles } from "lucide-react";
-import { subscribeToNewsletter } from "@/lib/newsletter";
-
-const STORAGE_KEY = "studyaihub:newsletter-popup";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useRouter, useRouterState } from "@tanstack/react-router";
 
 export function NewsletterPopup() {
-  const [show, setShow] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "duplicate">("idle");
+  const [error, setError] = useState("");
+  const router = useRouter();
+  const { location } = useRouterState();
+
+  const isExcludedPage = ["/admin", "/newsletter-confirmed", "/bookmarks"].includes(location.pathname);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === "subscribed" || stored === "dismissed") return;
+    if (isExcludedPage) {
+      setIsOpen(false);
+      return;
+    }
 
-    let armed = false;
-    const armTimer = window.setTimeout(() => {
-      armed = true;
-    }, 30000);
-
-    function onMouseOut(e: MouseEvent) {
-      if (!armed) return;
-      if (e.clientY <= 10 && !e.relatedTarget) {
-        setShow(true);
-        cleanup();
+    const isSubscribed = localStorage.getItem("studyai_subscribed") === "true";
+    const dismissedAt = localStorage.getItem("studyai_popup_dismissed");
+    
+    if (isSubscribed) return;
+    
+    if (dismissedAt) {
+      const dismissedTime = parseInt(dismissedAt, 10);
+      const sevenDays = 7 * 24 * 60 * 60 * 1000;
+      if (Date.now() - dismissedTime < sevenDays) {
+        return;
       }
     }
-    function onTimeoutShow() {
-      // Mobile fallback: show after 60s if user hasn't dismissed
-      setShow(true);
-      cleanup();
-    }
-    const fallbackTimer = window.setTimeout(onTimeoutShow, 60000);
 
-    function cleanup() {
-      window.clearTimeout(armTimer);
-      window.clearTimeout(fallbackTimer);
-      document.removeEventListener("mouseout", onMouseOut);
-    }
+    const timer = setTimeout(() => {
+      setIsOpen(true);
+    }, 8000);
 
-    document.addEventListener("mouseout", onMouseOut);
-    return cleanup;
-  }, []);
+    return () => clearTimeout(timer);
+  }, [isExcludedPage, location.pathname]);
 
-  function dismiss() {
-    setShow(false);
-    if (typeof window !== "undefined") {
-      localStorage.setItem(STORAGE_KEY, "dismissed");
-    }
-  }
+  const handleDismiss = () => {
+    setIsOpen(false);
+    localStorage.setItem("studyai_popup_dismissed", Date.now().toString());
+  };
 
-  async function handleSubmit(e: React.FormEvent) {
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
-    setStatus("loading");
-    setErrorMsg("");
-    const result = await subscribeToNewsletter(email, "exit-intent-popup");
-    if (result.ok) {
-      setStatus("success");
-      if (typeof window !== "undefined") {
-        localStorage.setItem(STORAGE_KEY, "subscribed");
-        window.location.href = "/newsletter-confirmed";
-      }
-    } else {
-      setStatus("error");
-      setErrorMsg(result.error || "Something went wrong. Try again.");
-    }
-  }
+    setError("");
 
-  if (!show) return null;
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email");
+      return;
+    }
+
+    setStatus("loading");
+
+    try {
+      const { error: insertError } = await supabase
+        .from("newsletter_subscribers")
+        .insert({ email, source: "popup" });
+
+      if (insertError) {
+        if (insertError.code === "23505") {
+          setStatus("duplicate");
+          localStorage.setItem("studyai_subscribed", "true");
+          setTimeout(() => {
+            setIsOpen(false);
+          }, 2000);
+          return;
+        }
+        throw insertError;
+      }
+
+      setStatus("success");
+      localStorage.setItem("studyai_subscribed", "true");
+      
+      setTimeout(() => {
+        setIsOpen(false);
+        router.navigate({ to: "/newsletter-confirmed" });
+      }, 3000);
+      
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong. Please try again.");
+      setStatus("idle");
+    }
+  };
+
+  if (!isOpen || isExcludedPage) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="newsletter-popup-title"
-      onClick={dismiss}
-    >
-      <div
-        className="relative w-full max-w-md rounded-2xl bg-card border border-border shadow-2xl p-6 sm:p-8"
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={handleDismiss}>
+      <div 
+        className="relative w-full max-w-[480px] bg-card text-card-foreground p-8 rounded-2xl shadow-2xl border border-border flex flex-col items-center text-center animate-in fade-in zoom-in-95 duration-300"
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={dismiss}
+        <button 
+          onClick={handleDismiss}
+          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
           aria-label="Close"
-          className="absolute top-3 right-3 h-8 w-8 rounded-full hover:bg-muted inline-flex items-center justify-center text-muted-foreground"
         >
-          <X className="h-4 w-4" />
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
 
+        <div className="text-6xl mb-4">🤖</div>
+        <h2 className="text-2xl font-bold mb-2 text-foreground">Wait — Get Free Weekly AI Tools</h2>
+        <p className="text-muted-foreground mb-6">
+          Join students getting the best AI tools and study tips every week. Free forever.
+        </p>
+
         {status === "success" ? (
-          <div className="text-center py-4">
-            <div className="text-5xl mb-3">🎉</div>
-            <h2 className="text-xl font-bold">You're in!</h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Check your inbox for a welcome email from StudyAI Hub.
-            </p>
+          <div className="flex flex-col items-center justify-center py-4 animate-in fade-in zoom-in">
+            <div className="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <p className="font-medium text-lg text-foreground">🎉 You are in! Check your inbox.</p>
+          </div>
+        ) : status === "duplicate" ? (
+          <div className="flex flex-col items-center justify-center py-4 animate-in fade-in zoom-in">
+             <div className="w-16 h-16 bg-blue-500/20 text-blue-500 rounded-full flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <p className="font-medium text-lg text-foreground">You are already subscribed! 🎉</p>
           </div>
         ) : (
-          <>
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-gradient-brand text-white mb-3">
-                <Sparkles className="h-6 w-6" />
-              </div>
-              <h2 id="newsletter-popup-title" className="text-xl sm:text-2xl font-bold">
-                Wait! Get free weekly AI tools
-              </h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Join 10,000+ students getting the best AI tools and study tips every week. Free forever. Unsubscribe anytime.
-              </p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="mt-5 space-y-3">
+          <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
+            <div>
               <input
                 type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@university.edu"
-                className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setError("");
+                }}
+                className={`w-full px-4 py-3 rounded-lg bg-background border ${error ? 'border-red-500' : 'border-input'} focus:outline-none focus:ring-2 focus:ring-primary text-foreground placeholder:text-muted-foreground`}
               />
-              <button
-                type="submit"
-                disabled={status === "loading"}
-                className="w-full rounded-lg bg-gradient-brand text-white font-semibold py-2.5 text-sm hover:opacity-90 transition-opacity disabled:opacity-60"
-              >
-                {status === "loading" ? "Subscribing..." : "Get Free Weekly Tips →"}
-              </button>
-              {status === "error" && (
-                <p className="text-xs text-red-500 text-center">{errorMsg}</p>
-              )}
-              <button
-                type="button"
-                onClick={dismiss}
-                className="block w-full text-center text-xs text-muted-foreground hover:text-foreground"
-              >
-                No thanks, I don't want free AI tips
-              </button>
-            </form>
-          </>
+              {error && <p className="text-red-500 text-sm mt-1 text-left">{error}</p>}
+            </div>
+            
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className="w-full py-3 rounded-lg bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-medium hover:opacity-90 transition-opacity disabled:opacity-70 flex items-center justify-center"
+            >
+              {status === "loading" ? "Subscribing..." : "Subscribe"}
+            </button>
+            
+            <button
+              type="button"
+              onClick={handleDismiss}
+              className="text-sm text-muted-foreground hover:text-foreground mt-2 transition-colors"
+            >
+              No thanks, I will figure it out myself
+            </button>
+          </form>
         )}
       </div>
     </div>
