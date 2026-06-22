@@ -117,18 +117,21 @@ export type Database = {
       }
       newsletter_subscribers: {
         Row: {
+          active: boolean
           email: string
           id: string
           source: string | null
           subscribed_at: string
         }
         Insert: {
+          active?: boolean
           email: string
           id?: string
           source?: string | null
           subscribed_at?: string
         }
         Update: {
+          active?: boolean
           email?: string
           id?: string
           source?: string | null

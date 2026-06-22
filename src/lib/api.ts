@@ -1,4 +1,4 @@
-import supabase from "./supabase";
+import { supabase } from "./supabase";
 
 // ============================================================================
 // POSTS
@@ -382,45 +382,82 @@ export async function getCategoryBySlug(slug: string) {
 // NEWSLETTER
 // ============================================================================
 
+export function isValidEmail(email: string) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email.toLowerCase().trim());
+}
+
+export type SubscribeNewsletterResult = {
+  success: boolean;
+  duplicate?: boolean;
+  message: string;
+  data?: unknown;
+};
+
 /**
  * Subscribe email to newsletter
  */
-export async function subscribeNewsletter(email: string) {
+export async function subscribeNewsletter(
+  email: string,
+  source = "website"
+): Promise<SubscribeNewsletterResult> {
   try {
-    if (!email || !email.includes("@")) {
-      return {
-        success: false,
-        message: "Please provide a valid email address",
-      };
+    if (!email || !email.includes("@") || !email.includes(".")) {
+      return { success: false, message: "Please enter a valid email address" };
     }
+
+    const cleanEmail = email.toLowerCase().trim();
+
+    if (!isValidEmail(cleanEmail)) {
+      return { success: false, message: "Please enter a valid email address" };
+    }
+
+    console.log("Attempting to subscribe:", cleanEmail);
 
     const { data, error } = await supabase
       .from("newsletter_subscribers")
-      .insert({ email, subscribed_at: new Date().toISOString() })
-      .select()
-      .single();
+      .insert({
+        email: cleanEmail,
+        source,
+        subscribed_at: new Date().toISOString(),
+      })
+      .select();
 
     if (error) {
+      console.error("Supabase insert error:", error);
+
       if (error.code === "23505") {
-        // Unique constraint violation
         return {
           success: false,
-          message: "This email is already subscribed",
+          duplicate: true,
+          message: "You are already subscribed! Check your inbox.",
         };
       }
-      throw error;
+
+      if (error.code === "42501" || error.message.includes("permission")) {
+        return {
+          success: false,
+          message: "Permission error. Please try again or contact support.",
+        };
+      }
+
+      return {
+        success: false,
+        message: "Something went wrong. Please try again.",
+      };
     }
 
+    console.log("Successfully subscribed:", data);
     return {
       success: true,
-      message: "Successfully subscribed to newsletter!",
+      message: "You are in! Welcome to StudyAI Hub.",
       data,
     };
-  } catch (error) {
-    console.error("Error subscribing to newsletter:", error);
+  } catch (err) {
+    console.error("Subscribe function error:", err);
     return {
       success: false,
-      message: "Failed to subscribe. Please try again.",
+      message: "Connection error. Please check your internet and try again.",
     };
   }
 }

@@ -10,7 +10,7 @@ import { AIAssistant } from "@/components/AIAssistant";
 import { BookmarkButton } from "@/components/BookmarkButton";
 import { KeyTakeaways } from "@/components/KeyTakeaways";
 import { DifficultyBadge } from "@/components/DifficultyBadge";
-import { subscribeToNewsletter } from "@/lib/newsletter";
+import { PostSidebarNewsletter } from "@/components/PostSidebarNewsletter";
 import {
   getPostBySlug,
   getAllPosts,
@@ -322,23 +322,7 @@ function BlogPost() {
             <aside className="space-y-8 lg:sticky lg:top-24 self-start">
               <TableOfContents headings={headings} />
 
-              <div className="rounded-2xl border border-border p-5 bg-gradient-brand text-white">
-                <p className="font-semibold">Free weekly digest</p>
-                <p className="mt-1 text-xs text-white/85">AI tools and study tips, every Friday.</p>
-                <form
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    const input = e.currentTarget.elements.namedItem("email") as HTMLInputElement;
-                    const res = await subscribeToNewsletter(input.value, `post:${post.slug}`);
-                    if (res.ok) { show("Subscribed!"); input.value = ""; }
-                    else show(res.error || "Try again");
-                  }}
-                  className="mt-3 flex flex-col gap-2"
-                >
-                  <input name="email" type="email" required placeholder="your@email.com" className="px-3 py-2 rounded-md bg-white/15 placeholder:text-white/70 text-white text-sm outline-none" />
-                  <button className="px-3 py-2 rounded-md bg-white text-primary text-sm font-semibold">Subscribe</button>
-                </form>
-              </div>
+              <PostSidebarNewsletter slug={post.slug} />
 
               <div>
                 <p className="text-sm font-semibold mb-3">Popular in {post.category}</p>

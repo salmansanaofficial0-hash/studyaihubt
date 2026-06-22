@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ArrowRight, Search, Sparkles, Star, Users, BookOpen, Clock, Eye } from "lucide-react";
 import { TOOLS } from "@/data/tools";
 import { PostCard, formatViews } from "@/components/PostCard";
-import { subscribeToNewsletter } from "@/lib/newsletter";
+import { useNewsletterForm } from "@/hooks/useNewsletterForm";
 import { getAllPosts, getCategories } from "@/lib/posts.functions";
 import type { Post, Category } from "@/lib/posts-types";
 import { ToolOfTheWeek } from "@/components/ToolOfTheWeek";
@@ -241,10 +241,8 @@ function ToolsSpotlight() {
 }
 
 function NewsletterCTA() {
-  const [email, setEmail] = useState("");
-  const [ok, setOk] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { email, setEmail, status, message, handleSubmit } = useNewsletterForm("home_cta");
+
   return (
     <section className="mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -253,31 +251,35 @@ function NewsletterCTA() {
           <div className="relative max-w-2xl">
             <h2 className="text-2xl md:text-4xl font-extrabold">Get Weekly AI Tools & Study Tips — Free</h2>
             <p className="mt-3 text-white/85">Join 10,000+ students getting smarter every week.</p>
-            {ok ? (
-              <p className="mt-6 text-lg font-medium">🎉 You're in! Check your inbox.</p>
+            {status === "success" || status === "duplicate" ? (
+              <p className="mt-6 text-lg font-medium">
+                {status === "success" ? "🎉 You're in! Check your inbox." : message}
+              </p>
             ) : (
               <form
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  setErr(null);
-                  setLoading(true);
-                  const res = await subscribeToNewsletter(email, "home_cta");
-                  setLoading(false);
-                  if (res.ok) {
-                    setOk(true); setEmail("");
-                    if (typeof window !== "undefined") window.location.href = "/newsletter-confirmed";
-                  }
-                  else setErr(res.error || "Something went wrong.");
-                }}
+                onSubmit={handleSubmit}
                 className="mt-6 flex flex-col sm:flex-row gap-2 max-w-lg"
               >
-                <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your@email.com" className="flex-1 px-4 py-3 rounded-lg bg-white/15 backdrop-blur text-white placeholder:text-white/70 outline-none focus:ring-2 ring-white" />
-                <button disabled={loading} className="px-6 py-3 rounded-lg bg-white text-primary font-semibold hover:scale-[1.02] transition-transform disabled:opacity-70">
-                  {loading ? "Subscribing..." : "Subscribe Free"}
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  disabled={status === "loading"}
+                  className="flex-1 px-4 py-3 rounded-lg bg-white/15 backdrop-blur text-white placeholder:text-white/70 outline-none focus:ring-2 ring-white disabled:opacity-60"
+                />
+                <button
+                  disabled={status === "loading"}
+                  className="px-6 py-3 rounded-lg bg-white text-primary font-semibold hover:scale-[1.02] transition-transform disabled:opacity-70"
+                >
+                  {status === "loading" ? "Subscribing..." : "Subscribe Free"}
                 </button>
               </form>
             )}
-            {err && <p className="mt-3 text-sm text-white">{err}</p>}
+            {status === "error" && message && (
+              <p className="mt-3 text-sm text-white/90">{message}</p>
+            )}
             <p className="mt-3 text-xs text-white/70">No spam. Unsubscribe anytime.</p>
           </div>
         </div>
